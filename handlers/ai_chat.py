@@ -1,83 +1,101 @@
-
+# path: handlers/ai_chat.py
 from aiogram import Router, F
 from aiogram.types import Message
 from aiogram.fsm.context import FSMContext
 
 from locales import LOCALES
 from utils.lang import get_lang
-from keyboards.reply import ai_chat_kb, main_menu
 from filters.registered import RegisteredFilter
 
-from dataclasses import dataclass
-from typing import List, Dict
-
-from openai import OpenAI
+from states.ai_chat import AIChat
 from config import settings
 
+# OpenAI mijozini xavfsiz import + mavjud bo'lmasa graceful degrade
+try:
+    from openai import OpenAI
+except Exception:
+    OpenAI = None
+
 router = Router()
-client = OpenAI(api_key=settings.OPENAI_API_KEY)
 
-# FSM holati
-from aiogram.fsm.state import StatesGroup, State
-class AIChat(StatesGroup):
-    waiting = State()
+def _client_or_none():
+    """OpenAI klientini qaytaradi yoki None (kalit/mijoz bo'lmasa)."""
+    if OpenAI is None:
+        return None
+    api_key = getattr(settings, "OPENAI_API_KEY", "") or ""
+    if not api_key:
+        return None
+    try:
+        return OpenAI(api_key=api_key)
+    except Exception:
+        return None
 
-# 1) Asosiy menyudan AI tugmasi bosilganda
-@router.message(RegisteredFilter(), F.text.in_({"🤖 Sun'iy intellekt", "🤖 AI Assistant", "🤖 ИИ-помощник"}))
+# 1) Asosiy menyudan AI chatga kirish
+@router.message(
+    RegisteredFilter(),
+    F.text.in_({"🤖 Sun’iy intellekt", "🤖 AI Assistant", "🤖 ИИ ассистент"})
+)
 async def ai_enter(message: Message, state: FSMContext):
     lang = await get_lang(message.from_user.id)
-    await state.set_state(AIChat.waiting)
-    # Tarixni boshlab qo'yamiz (engil kontekst uchun 10 xabar saqlaymiz)
-    await state.update_data(history=[])
-    await message.answer(LOCALES[lang]["ai_intro"], reply_markup=ai_chat_kb(lang))
+    await state.set_state(AIChat.chatting)
+    t = LOCALES[lang]
+    # Kalit bor-yo'qligini userga ko'rsatmay, muloyim ogohlantiramiz
+    if _client_or_none() is None:
+        await message.answer(
+            t["ai_welcome"]
+            + "\n\n"
+            + t["ai_no_key"]  # foydalanuvchi uchun neytral xabar
+        )
+    else:
+        await message.answer(t["ai_welcome"])
 
-# 2) Orqaga bosilsa — chiqish
-@router.message(RegisteredFilter(), AIChat.waiting, F.text.func(lambda s: s and s.strip() in {"⬅️ Orqaga","⬅️ Back","⬅️ Назад"}))
-async def ai_exit(message: Message, state: FSMContext):
+# 2) AI chat: istalgan matnga javob
+@router.message(RegisteredFilter(), AIChat.chatting, F.text)
+async def ai_answer(message: Message, state: FSMContext):
     lang = await get_lang(message.from_user.id)
-    await state.clear()
-    await message.answer(LOCALES[lang]["ai_ended"], reply_markup=main_menu(lang))
-
-# 3) Foydalanuvchi savoli — ChatGPT’dan javob qaytarish
-@router.message(RegisteredFilter(), AIChat.waiting, F.text)
-async def ai_ask(message: Message, state: FSMContext):
-    lang = await get_lang(message.from_user.id)
-    data = await state.get_data()
-    history: List[Dict[str, str]] = data.get("history", [])
+    t = LOCALES[lang]
+    client = _client_or_none()
+    if client is None:
+        # Admin uchun ko‘proq diagnostika (faqat GROUP_ID/Admin bo’lsa yaxshi, lekin hozir soddaroq)
+        await message.answer(t["ai_no_key"])
+        return
 
     user_text = message.text.strip()
+    if not user_text:
+        await message.answer(t["ai_empty"])
+        return
 
-    # Kichik sistem prompt (tilga mos)
-    sys_prompts = {
-        "uz": "Siz foydalanuvchiga o‘zbek tilida aniq va qisqa javob beruvchi yordamchisiz.",
-        "en": "You are a helpful assistant. Answer in concise, clear English.",
-        "ru": "Вы полезный ассистент. Отвечайте кратко и ясно на русском.",
-    }
-    system_msg = {"role": "system", "content": sys_prompts.get(lang, sys_prompts["uz"])}
-
-    # Tarixni yig‘amiz (oxirgi 10 ta xabar)
-    messages = [system_msg] + history + [{"role": "user", "content": user_text}]
-
-    # Tip berish
-    await message.answer(LOCALES[lang]["ai_thinking"])
+    # System prompt — tilga mos
+    system_prompt = t["ai_system_prompt"]
 
     try:
+        # Chat Completions (OpenAI Python SDK >=1.0)
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
-            messages=messages,
-            temperature=0.3,
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user",   "content": user_text}
+            ],
+            temperature=0.6,
             max_tokens=600,
         )
-        answer = resp.choices[0].message.content.strip() if resp.choices else "…"
-    except Exception as e:
-        answer = {
-            "uz": "Kechirasiz, hozir javob bera olmadim.",
-            "en": "Sorry, I couldn’t answer right now.",
-            "ru": "Извините, сейчас не удалось ответить.",
-        }.get(lang, "Kechirasiz, hozir javob bera olmadim.")
+        answer = resp.choices[0].message.content if resp and resp.choices else t["ai_fail"]
+        # Xavfsizlik: juda uzun bo'lsa bir oz kesamiz
+        if answer and len(answer) > 3500:
+            answer = answer[:3500] + " …"
+        await message.answer(answer or t["ai_fail"])
+    except Exception:
+        await message.answer(t["ai_fail"])
 
-    # Yangi tarixni saqlaymiz
-    history = (history + [{"role": "user", "content": user_text}, {"role": "assistant", "content": answer}])[-10:]
-    await state.update_data(history=history)
+# 3) Rasm yuborilsa (hozircha qo‘llab-quvvatlanmagan)
+@router.message(RegisteredFilter(), AIChat.chatting, F.photo)
+async def ai_photo_stub(message: Message):
+    lang = await get_lang(message.from_user.id)
+    await message.answer(LOCALES[lang]["ai_no_image"])
 
-    await message.answer(answer, reply_markup=ai_chat_kb(lang))
+# 4) /ai_stop yoki “menu” ga qaytish
+@router.message(RegisteredFilter(), AIChat.chatting, F.text.func(lambda s: s and s.lower() in {"/ai_stop", "stop"}))
+async def ai_stop(message: Message, state: FSMContext):
+    await state.clear()
+    lang = await get_lang(message.from_user.id)
+    await message.answer(LOCALES[lang]["ai_stopped"])
