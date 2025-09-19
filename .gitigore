@@ -1,0 +1,47 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.py.class
+
+# Virtual environment
+venv/
+env/
+.venv/
+
+# System files
+.DS_Store
+Thumbs.db
+
+# IDE/editor config files
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+*.log
+
+# Databases (agar lokal bazani GitHubga joylamoqchi bo‘lmasangiz)
+*.sqlite3
+*.db
+
+# Environment variables
+.env
+
+# PyInstaller build files
+build/
+dist/
+*.spec
+
+# Coverage/testing
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints
+
+# Local configs
+*.local
