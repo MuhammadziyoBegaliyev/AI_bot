@@ -1,23 +1,27 @@
 # path: handlers/ai_chat.py
 from aiogram import Router, F
-from aiogram.types import Message
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
 
 from locales import LOCALES
 from utils.lang import get_lang
 from filters.registered import RegisteredFilter
-from states.ai import AIChat          # ← correct import
-from config import settings
+from states.ai import AIChat
+from keyboards.reply import main_menu
 
-# OpenAI client (optional)
+# OpenAI mijozini xavfsiz import
 try:
     from openai import OpenAI
 except Exception:
     OpenAI = None
 
+from config import settings
+
 router = Router()
 
+
 def _client_or_none():
+    """OpenAI klientini qaytaradi yoki None (kalit/mijoz bo'lmasa)."""
     if OpenAI is None:
         return None
     api_key = getattr(settings, "OPENAI_API_KEY", "") or ""
@@ -28,80 +32,90 @@ def _client_or_none():
     except Exception:
         return None
 
-def _norm(s: str) -> str:
-    if not s:
-        return ""
-    # remove emoji and normalize apostrophes/spaces
-    s = s.replace("🤖", "").replace("’", "'").strip().lower()
-    return s
 
-TRIGGERS = {
-    "sun'iy intellekt",      # UZ
-    "ai assistant",          # EN
-    "ии ассистент",          # RU
-    "ai chat",               # fallback
-}
+def _ai_back_kb(lang: str) -> InlineKeyboardMarkup:
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=LOCALES[lang]["back"], callback_data="ai:back")]
+        ]
+    )
 
-# 1) Enter AI chat from main menu or via /ai
+
+# 1) Asosiy menyudan AI chatga kirish
 @router.message(
     RegisteredFilter(),
-    F.text.func(lambda t: t and (_norm(t) in TRIGGERS)) | F.text.regexp(r"^/ai\b", flags=0)
+    F.text.in_({"🤖 Sun'iy intellekt", "🤖 AI Assistant", "🤖 ИИ-помощник"})
 )
 async def ai_enter(message: Message, state: FSMContext):
     lang = await get_lang(message.from_user.id)
     t = LOCALES[lang]
-    await state.set_state(AIChat.chatting)
-    if _client_or_none() is None:
-        await message.answer(t["ai_welcome"] + "\n\n" + t["ai_no_key"])
-    else:
-        await message.answer(t["ai_welcome"])
 
-# 2) Chat loop
+    await state.set_state(AIChat.chatting)
+
+    # Kalit bo‘lmasa ham foydalanuvchi uchun neytral xabar
+    if _client_or_none() is None:
+        await message.answer(
+            t["ai_intro"] + "\n\n" + t["ai_no_key"],
+            reply_markup=_ai_back_kb(lang),
+        )
+    else:
+        await message.answer(t["ai_intro"], reply_markup=_ai_back_kb(lang))
+
+
+# 2) AI chat: istalgan matnga javob
 @router.message(RegisteredFilter(), AIChat.chatting, F.text)
 async def ai_answer(message: Message, state: FSMContext):
     lang = await get_lang(message.from_user.id)
     t = LOCALES[lang]
-
-    # Exit?
-    txt_norm = _norm(message.text)
-    if txt_norm in { "back", "orqaga", "назад" } or message.text.strip().lower() in {"/ai_stop", "stop"}:
-        await state.clear()
-        await message.answer(t["ai_stopped"])
-        return
-
     client = _client_or_none()
+
     if client is None:
-        await message.answer(t["ai_no_key"])
+        await message.answer(t["ai_no_key"], reply_markup=_ai_back_kb(lang))
         return
 
     user_text = message.text.strip()
     if not user_text:
-        await message.answer(t["ai_empty"])
+        await message.answer(t["ai_empty"], reply_markup=_ai_back_kb(lang))
         return
 
-    system_prompt = t["ai_system_prompt"]
+    # “Yozayapman…” xabarini yuborib turamiz
+    thinking_msg = await message.answer(t["ai_thinking"], reply_markup=_ai_back_kb(lang))
+
+    system_prompt = t.get(
+        "ai_system_prompt",
+        "You are a helpful, concise assistant. Answer in the user's language."
+    )
 
     try:
         resp = client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user", "content": user_text},
+                {"role": "user",   "content": user_text},
             ],
             temperature=0.6,
             max_tokens=600,
         )
-        answer = (resp.choices[0].message.content or "").strip() if resp and resp.choices else ""
-        if not answer:
-            answer = t["ai_fail"]
-        if len(answer) > 3500:
+        answer = resp.choices[0].message.content if resp and resp.choices else t["ai_fail"]
+        if answer and len(answer) > 3500:
             answer = answer[:3500] + " …"
-        await message.answer(answer)
+        await thinking_msg.edit_text(answer, reply_markup=_ai_back_kb(lang))
     except Exception:
-        await message.answer(t["ai_fail"])
+        await thinking_msg.edit_text(t["ai_fail"], reply_markup=_ai_back_kb(lang))
 
-# 3) Photo stub (optional)
+
+# 3) Rasm yuborilsa – hozircha qo‘llanmaydi
 @router.message(RegisteredFilter(), AIChat.chatting, F.photo)
 async def ai_photo_stub(message: Message):
     lang = await get_lang(message.from_user.id)
-    await message.answer(LOCALES[lang]["ai_no_image"])
+    await message.answer(LOCALES[lang]["ai_no_image"], reply_markup=_ai_back_kb(lang))
+
+
+# 4) Inline “⬅️ Orqaga”
+@router.callback_query(F.data == "ai:back")
+async def ai_back(cb: CallbackQuery, state: FSMContext):
+    await state.clear()
+    lang = await get_lang(cb.from_user.id)
+    await cb.message.edit_text(LOCALES[lang]["ai_ended"])
+    await cb.message.answer(LOCALES[lang]["menu"], reply_markup=main_menu(lang))
+    await cb.answer()

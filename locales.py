@@ -91,13 +91,16 @@ LOCALES = {
         "adm_ph_saved": "✅ Apteka qo‘shildi: {title} (id={id})",
 
         # AI (keys expected by handlers/ai_chat.py)
-        "ai_welcome": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
-        "ai_no_key": "AI xizmati hozircha sozlanmagan. Admin API kalitini o‘rnatishi kerak.",
-        "ai_empty": "Iltimos, matn yuboring.",
+        "btn_ai": "🤖 Sun'iy intellekt",
+        "ai_intro": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
+        "ai_no_key": "Kechirasiz, AI hozircha sozlanmagan.",
+        "ai_empty": "Iltimos, savolingizni yozing.",
+        "ai_thinking": "Yozayapman…",
         "ai_fail": "Kechirasiz, hozir javob bera olmadim.",
-        "ai_stopped": "AI chat yopildi.",
-        "ai_no_image": "Hozircha rasmni tahlil qila olmayman.",
-        "ai_system_prompt": "Foydalanuvchining tiliga mos, qisqa va aniq javob beradigan yordamchi bo‘l.",
+        "ai_no_image": "Hali rasmga javob berishni yoqmadi. Matn yuboring.",
+        "ai_ended": "Suhbat yakunlandi.",
+        "ai_system_prompt": "Siz foydali va qisqa javob beradigan yordamchisiz. Javobni foydalanuvchi tilida bering.",
+
     },
 
     "en": {
@@ -190,13 +193,16 @@ LOCALES = {
         "adm_ph_saved": "✅ Pharmacy added: {title} (id={id})",
 
         # AI
-        "ai_welcome": "🤖 AI mode. Ask anything.\nExit: “⬅️ Back” or /ai_stop",
-        "ai_no_key": "AI is not configured yet. Ask the admin to set the API key.",
-        "ai_empty": "Please send a message.",
-        "ai_fail": "Sorry, I couldn’t answer that.",
-        "ai_stopped": "AI chat closed.",
-        "ai_no_image": "Image analysis isn’t supported yet.",
-        "ai_system_prompt": "Be a concise, helpful assistant. Prefer replying in the user's language.",
+        "btn_ai": "🤖 AI Assistant",
+        "ai_intro": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
+        "ai_no_key": "Sorry, AI is not configured yet.",
+        "ai_empty": "Please type your question.",
+        "ai_thinking": "Thinking…",
+        "ai_fail": "Sorry, I couldn't answer now.",
+        "ai_no_image": "Image inputs are not supported yet. Please send text.",
+        "ai_ended": "Chat ended.",
+        "ai_system_prompt": "You are a helpful, concise assistant. Answer in the user's language.",
+
     },
 
     "ru": {
@@ -289,12 +295,15 @@ LOCALES = {
         "adm_ph_saved": "✅ Аптека добавлена: {title} (id={id})",
 
         # AI
-        "ai_welcome": "🤖 Режим ИИ. Задайте вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
-        "ai_no_key": "ИИ ещё не настроен. Попросите администратора указать API-ключ.",
-        "ai_empty": "Пожалуйста, отправьте текст.",
-        "ai_fail": "Извините, не удалось ответить.",
-        "ai_stopped": "Чат с ИИ закрыт.",
-        "ai_no_image": "Анализ изображений пока не поддерживается.",
-        "ai_system_prompt": "Будь вежливым и лаконичным помощником. Отвечай на языке пользователя.",
+        "btn_ai": "🤖 ИИ-помощник",
+        "ai_intro": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
+        "ai_no_key": "Извините, ИИ пока не настроен.",
+        "ai_empty": "Пожалуйста, напишите свой вопрос.",
+        "ai_thinking": "Печатаю…",
+        "ai_fail": "Извините, сейчас не могу ответить.",
+        "ai_no_image": "Изображения пока не поддерживаются. Отправьте текст.",
+        "ai_ended": "Диалог завершён.",
+        "ai_system_prompt": "Вы полезный и лаконичный ассистент. Отвечайте на языке пользователя.",
+
     },
 }
