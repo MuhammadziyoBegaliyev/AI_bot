@@ -2,7 +2,6 @@
 
 LOCALES = {
     "uz": {
-
         # Greeting / onboarding
         "welcome": "Assalomu alaykum! Farmatsevtika botiga xush kelibsiz!",
         "hello":   "Assalomu alaykum! Farmatsevtika botiga xush kelibsiz!",
@@ -16,6 +15,7 @@ LOCALES = {
         "btn_feedback": "💬 Fikr bildirish",
         "btn_lang": "🌐 Tilni o'zgartirish",
         "btn_locations": "📍 Lokatsiyalar",
+        "btn_ai": "🤖 Sun'iy intellekt",
 
         # Register flow
         "reg_name": "Ism va familiyangizni yuboring (masalan: Ali Aliyev).",
@@ -61,7 +61,7 @@ LOCALES = {
         "admin_only": "Bu bo‘lim faqat adminlar uchun.",
         "skip": "o‘tkazib yuborish",
 
-        # Admin – locations (custom Locations bo‘limi)
+        # Admin – locations
         "admin_loc_add": "➕ Lokatsiya qo‘shish",
         "admin_loc_title": "Filial nomini yuboring (masalan: Chilonzor apteka).",
         "admin_loc_address": "Manzilni yozing (masalan: Chilonzor, Toshkent).",
@@ -69,7 +69,7 @@ LOCALES = {
         "admin_loc_ask_point": "📍 Endi lokatsiyani yuboring (\"Turgan joyni yuborish\" tugmasidan foydalaning).",
         "admin_loc_saved": "✅ Lokatsiya saqlandi.",
 
-        # Admin – drug CRUD (promptlar)
+        # Admin – drug CRUD prompts
         "adm_drug_name": "Dori nomi:",
         "adm_drug_uses": "Qo‘llanilishi:",
         "adm_drug_side": "Yon ta'siri:",
@@ -82,7 +82,7 @@ LOCALES = {
         "adm_deleted": "🗑 O‘chirildi.",
         "adm_wrong_number": "❗️ Noto‘g‘ri format. Raqam kiriting.",
 
-        # Admin – pharmacy CRUD (promptlar)
+        # Admin – pharmacy CRUD prompts
         "adm_ph_title": "Apteka nomi (filial nomi):",
         "adm_ph_lat": "Latitude (masalan 41.285):",
         "adm_ph_lon": "Longitude:",
@@ -90,12 +90,14 @@ LOCALES = {
         "adm_ph_link": "Xarita havolasi (yo‘q bo‘lsa '-' yozing):",
         "adm_ph_saved": "✅ Apteka qo‘shildi: {title} (id={id})",
 
-        ## AI
-        "btn_ai": "🤖 Sun'iy intellekt",
-        "ai_intro": "🤖 Sun'iy intellekt rejimi.\nIstalgan savolingizni yozing. Yakunlash uchun pastdagi “⬅️ Orqaga” tugmasini bosing.",
-        "ai_thinking": "Yozayapman…",
-        "ai_ended": "Suhbat yakunlandi.",
-
+        # AI (keys expected by handlers/ai_chat.py)
+        "ai_welcome": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
+        "ai_no_key": "AI xizmati hozircha sozlanmagan. Admin API kalitini o‘rnatishi kerak.",
+        "ai_empty": "Iltimos, matn yuboring.",
+        "ai_fail": "Kechirasiz, hozir javob bera olmadim.",
+        "ai_stopped": "AI chat yopildi.",
+        "ai_no_image": "Hozircha rasmni tahlil qila olmayman.",
+        "ai_system_prompt": "Foydalanuvchining tiliga mos, qisqa va aniq javob beradigan yordamchi bo‘l.",
     },
 
     "en": {
@@ -112,6 +114,7 @@ LOCALES = {
         "btn_feedback": "💬 Feedback",
         "btn_lang": "🌐 Change language",
         "btn_locations": "📍 Locations",
+        "btn_ai": "🤖 AI Assistant",
 
         # Register flow
         "reg_name": "Send your full name (e.g., John Doe).",
@@ -186,12 +189,14 @@ LOCALES = {
         "adm_ph_link": "Map URL (type '-' if none):",
         "adm_ph_saved": "✅ Pharmacy added: {title} (id={id})",
 
-        ##ai
-        "btn_ai": "🤖 AI Assistant",
-        "ai_intro": "🤖 AI mode.\nAsk me anything. Tap “⬅️ Back” to finish.",
-        "ai_thinking": "Thinking…",
-        "ai_ended": "Chat ended.",
-
+        # AI
+        "ai_welcome": "🤖 AI mode. Ask anything.\nExit: “⬅️ Back” or /ai_stop",
+        "ai_no_key": "AI is not configured yet. Ask the admin to set the API key.",
+        "ai_empty": "Please send a message.",
+        "ai_fail": "Sorry, I couldn’t answer that.",
+        "ai_stopped": "AI chat closed.",
+        "ai_no_image": "Image analysis isn’t supported yet.",
+        "ai_system_prompt": "Be a concise, helpful assistant. Prefer replying in the user's language.",
     },
 
     "ru": {
@@ -208,6 +213,7 @@ LOCALES = {
         "btn_feedback": "💬 Отзыв",
         "btn_lang": "🌐 Сменить язык",
         "btn_locations": "📍 Локации",
+        "btn_ai": "🤖 ИИ-помощник",
 
         # Register flow
         "reg_name": "Отправьте ФИО (например: Иван Иванов).",
@@ -282,11 +288,13 @@ LOCALES = {
         "adm_ph_link": "Ссылка на карту (если нет — «-»):",
         "adm_ph_saved": "✅ Аптека добавлена: {title} (id={id})",
 
-        #ai
-        "btn_ai": "🤖 ИИ-помощник",
-        "ai_intro": "🤖 Режим ИИ.\nЗадайте любой вопрос. Нажмите «⬅️ Назад» чтобы выйти.",
-        "ai_thinking": "Печатаю…",
-        "ai_ended": "Диалог завершён.",
-
+        # AI
+        "ai_welcome": "🤖 Режим ИИ. Задайте вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
+        "ai_no_key": "ИИ ещё не настроен. Попросите администратора указать API-ключ.",
+        "ai_empty": "Пожалуйста, отправьте текст.",
+        "ai_fail": "Извините, не удалось ответить.",
+        "ai_stopped": "Чат с ИИ закрыт.",
+        "ai_no_image": "Анализ изображений пока не поддерживается.",
+        "ai_system_prompt": "Будь вежливым и лаконичным помощником. Отвечай на языке пользователя.",
     },
 }
