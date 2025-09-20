@@ -1,4 +1,4 @@
-
+# path: locales.py
 
 LOCALES = {
     "uz": {
@@ -39,37 +39,43 @@ LOCALES = {
         "more_search": "➕ Yana qidirish",
 
         # Feedback & Complaint (user flow)
-        "fb_enter_title": "Iltimos, quyidagidan birini tanlang:",
-        "fb_btn_feedback": "🟢 Fikr bildirish",
-        "fb_btn_complaint": "🔴 Shikoyat qilish",
-        "fb_ask_text": "Fikringizni yozib yuboring:",
-        "fb_thanks": "Rahmat! Fikringiz qabul qilindi. Iltimos, baholang:",
-        "fb_rated": "Rahmat! Bahoyingiz qabul qilindi.",
-        "fb_choose": "Iltimos, quyidagidan birini tanlang:",
         "fb_enter_title": "Fikr yoki shikoyat turini tanlang:",
         "fb_choose": "Iltimos, quyidagidan birini tanlang:",
+        "fb_btn_feedback": "🟢 Fikr bildirish",
+        "fb_btn_complaint": "🔴 Shikoyat qilish",
+
         "fb_rate_ask": "Iltimos, baholang:",
         "fb_text_ask": "Fikringizni yozib yuboring:",
         "fb_thanks": "Rahmat! Fikringiz qabul qilindi.",
-        "cmp_ask_text": "Shikoyatingizni batafsil yozib yuboring:",
-        "cmp_after_text": "Qo‘shimcha ma’lumot yuborishingiz mumkin:",
+        "fb_rated": "Rahmat! Bahoyingiz qabul qilindi.",
+
+        "cmp_text_ask": "Shikoyatingizni batafsil yozing:",
+        "cmp_addons_title": "Rasm yoki lokatsiya qo‘shishingiz mumkin, so‘ng “Yuborish”ni bosing.",
         "cmp_btn_photo": "📷 Rasm yuborish",
         "cmp_btn_loc": "📍 Lokatsiyani yuborish",
         "cmp_btn_send": "✅ Shikoyatni yuborish",
         "cmp_photo_saved": "Rasm qabul qilindi.",
         "cmp_loc_saved": "Lokatsiya qabul qilindi.",
         "cmp_sent": "Shikoyatingiz yuborildi. Rahmat!",
-        
 
-        "cmp_text_ask": "Shikoyatingizni yozing:",
-        "cmp_addons_title": "Rasm yoki lokatsiya qo‘shishingiz mumkin, so‘ng “Yuborish” ni bosing.",
-        "cmp_sent": "Shikoyatingiz yuborildi.",
+        # Group message (to moderators)
+        "grp_tag_feedback": "💚 FIKR",
+        "grp_tag_complaint": "🚩 SHIKOYAT",
+        "grp_title": "🧷 Til",
+        "grp_user": "👤 Foydalanuvchi",
+        "grp_username": "🔗 Username",
+        "grp_contact": "📞 Kontakt",
+        "grp_age": "🎂 Yoshi",
+        "grp_text": "✍️ Matn",
+        "grp_rating": "⭐ Baho",
+        "grp_location": "📍 Lokatsiya mavjud",
+        "grp_photo": "🖼 Rasm biriktirilgan",
 
         # Locations (user)
         "loc_menu_title": "Lokatsiyalar bo‘limi:",
         "loc_btn_nearest": "📍 Eng yaqin lokatsiya",
         "loc_btn_all": "📍 Hamma lokatsiyalar",
-        "ask_share_loc": "Iltimos, yurayotgan joyingizni yuboring.",
+        "ask_share_loc": "Iltimos, hozirgi joylashuvingizni yuboring.",
         "ask_share_button": "📍 Turgan joyni yuborish",
         "no_locations": "Hozircha lokatsiyalar bazada yo‘q.",
         "loc_list_title": "Filiallar ro‘yxati:",
@@ -118,7 +124,7 @@ LOCALES = {
         "ai_empty": "Iltimos, savolingizni yozing.",
         "ai_thinking": "Yozayapman…",
         "ai_fail": "Kechirasiz, hozir javob bera olmadim.",
-        "ai_no_image": "Hali rasmga javob berishni yoqmadi. Matn yuboring.",
+        "ai_no_image": "Hali rasmga javob berish yoq. Matn yuboring.",
         "ai_stopped": "Suhbat yakunlandi.",
         "ai_ended": "Suhbat yakunlandi.",
         "ai_rate_limited": "Hozircha ko‘p so‘rov yuborildi yoki kvota tugagan. Birozdan so‘ng yana urinib ko‘ring.",
@@ -126,11 +132,13 @@ LOCALES = {
     },
 
     "en": {
+        # Greeting / onboarding
         "welcome": "Welcome to the Pharmaceutics bot!",
         "hello": "Welcome to the Pharmaceutics bot!",
         "choose_lang": "Please choose a language:",
         "need_register": "Please register first.",
 
+        # Main menu & buttons
         "menu": "Main menu:",
         "back": "⬅️ Back",
         "btn_search": "🔎 Search",
@@ -139,11 +147,13 @@ LOCALES = {
         "btn_locations": "📍 Locations",
         "btn_ai": "🤖 AI Assistant",
 
+        # Register flow
         "reg_name": "Send your full name (e.g., John Doe).",
         "reg_contact": "Share your phone as a contact or type it.",
         "reg_age": "Enter your age (e.g., 23).",
         "reg_done": "You're registered!",
 
+        # Search flow
         "search_ask": "Type a drug name or send a photo.",
         "search_none": "Sorry, nothing found. Try another name or photo.",
         "drug_info": "🧪 Drug information",
@@ -159,30 +169,37 @@ LOCALES = {
         "more_search": "➕ Search more",
 
         # Feedback & Complaint
-        "fb_enter_title": "Please choose one:",
-        "fb_btn_feedback": "🟢 Send feedback",
-        "fb_btn_complaint": "🔴 File a complaint",
-        "fb_ask_text": "Write your feedback:",
-        "fb_thanks": "Thanks! Received. Please rate:",
-        "fb_rated": "Thanks! Your rating is saved.",
         "fb_enter_title": "Choose feedback type:",
         "fb_choose": "Please choose one:",
+        "fb_btn_feedback": "🟢 Send feedback",
+        "fb_btn_complaint": "🔴 File a complaint",
+
         "fb_rate_ask": "Please rate:",
         "fb_text_ask": "Please write your feedback:",
         "fb_thanks": "Thanks! Your feedback has been received.",
+        "fb_rated": "Thanks! Your rating is saved.",
 
-        "cmp_text_ask": "Please describe your complaint:",
+        "cmp_text_ask": "Please describe your complaint in detail:",
         "cmp_addons_title": "You may attach a photo or location, then press “Send”.",
-        "cmp_sent": "Your complaint has been sent.",
-        "cmp_ask_text": "Describe your complaint in detail:",
-        "cmp_after_text": "You can attach more info:",
         "cmp_btn_photo": "📷 Send a photo",
         "cmp_btn_loc": "📍 Send location",
         "cmp_btn_send": "✅ Submit complaint",
         "cmp_photo_saved": "Photo saved.",
         "cmp_loc_saved": "Location saved.",
         "cmp_sent": "Your complaint has been sent. Thank you!",
-        "fb_choose": "Please choose one:",
+
+        # Group message (to moderators)
+        "grp_tag_feedback": "💚 FEEDBACK",
+        "grp_tag_complaint": "🚩 COMPLAINT",
+        "grp_title": "🧷 Language",
+        "grp_user": "👤 User",
+        "grp_username": "🔗 Username",
+        "grp_contact": "📞 Contact",
+        "grp_age": "🎂 Age",
+        "grp_text": "✍️ Text",
+        "grp_rating": "⭐ Rating",
+        "grp_location": "📍 Location attached",
+        "grp_photo": "🖼 Photo attached",
 
         # Locations
         "loc_menu_title": "Locations menu:",
@@ -245,11 +262,13 @@ LOCALES = {
     },
 
     "ru": {
+        # Greeting / onboarding
         "welcome": "Добро пожаловать в фарма-бота!",
         "hello": "Добро пожаловать в фарма-бота!",
         "choose_lang": "Пожалуйста, выберите язык:",
         "need_register": "Пожалуйста, сначала зарегистрируйтесь.",
 
+        # Main menu & buttons
         "menu": "Главное меню:",
         "back": "⬅️ Назад",
         "btn_search": "🔎 Поиск",
@@ -258,11 +277,13 @@ LOCALES = {
         "btn_locations": "📍 Локации",
         "btn_ai": "🤖 ИИ-помощник",
 
+        # Register flow
         "reg_name": "Отправьте ФИО (например: Иван Иванов).",
         "reg_contact": "Отправьте телефон контактом или введите его.",
         "reg_age": "Введите ваш возраст (например: 23).",
         "reg_done": "Вы зарегистрированы!",
 
+        # Search flow
         "search_ask": "Введите название лекарства или отправьте фото.",
         "search_none": "К сожалению, ничего не найдено. Попробуйте другое название/фото.",
         "drug_info": "🧪 Информация о препарате",
@@ -278,30 +299,38 @@ LOCALES = {
         "more_search": "➕ Ещё поиск",
 
         # Feedback & Complaint
-        "fb_enter_title": "Пожалуйста, выберите действие:",
-        "fb_btn_feedback": "🟢 Оставить отзыв",
-        "fb_btn_complaint": "🔴 Оставить жалобу",
-        "fb_ask_text": "Напишите ваш отзыв:",
-        "fb_thanks": "Спасибо! Получено. Пожалуйста, оцените:",
-        "fb_rated": "Спасибо! Ваша оценка сохранена.",
         "fb_enter_title": "Выберите тип: отзыв или жалоба:",
         "fb_choose": "Пожалуйста, выберите действие:",
+        "fb_btn_feedback": "🟢 Оставить отзыв",
+        "fb_btn_complaint": "🔴 Подать жалобу",
+
         "fb_rate_ask": "Пожалуйста, оцените:",
         "fb_text_ask": "Напишите ваш отзыв:",
         "fb_thanks": "Спасибо! Ваш отзыв получен.",
-        "fb_choose": "Пожалуйста, выберите действие:",
-        "cmp_ask_text": "Опишите вашу жалобу подробно:",
-        "cmp_after_text": "Вы можете добавить больше информации:",
+        "fb_rated": "Спасибо! Ваша оценка сохранена.",
+
+        "cmp_text_ask": "Опишите вашу жалобу подробно:",
+        "cmp_addons_title": "Можно приложить фото или локацию, затем нажмите «Отправить».",
         "cmp_btn_photo": "📷 Отправить фото",
         "cmp_btn_loc": "📍 Отправить локацию",
         "cmp_btn_send": "✅ Отправить жалобу",
         "cmp_photo_saved": "Фото сохранено.",
         "cmp_loc_saved": "Локация сохранена.",
         "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
-        "cmp_text_ask": "Опишите вашу жалобу:",
-        "cmp_addons_title": "Можете приложить фото или локацию, затем нажмите «Отправить».",
-        "cmp_sent": "Ваша жалоба отправлена.",
-        
+
+        # Group message (to moderators)
+        "grp_tag_feedback": "💚 ОТЗЫВ",
+        "grp_tag_complaint": "🚩 ЖАЛОБА",
+        "grp_title": "🧷 Язык",
+        "grp_user": "👤 Пользователь",
+        "grp_username": "🔗 Username",
+        "grp_contact": "📞 Контакт",
+        "grp_age": "🎂 Возраст",
+        "grp_text": "✍️ Текст",
+        "grp_rating": "⭐ Оценка",
+        "grp_location": "📍 Приложена локация",
+        "grp_photo": "🖼 Приложено фото",
+
         # Locations
         "loc_menu_title": "Меню локаций:",
         "loc_btn_nearest": "📍 Ближайшая локация",
@@ -349,7 +378,7 @@ LOCALES = {
         "adm_ph_saved": "✅ Аптека добавлена: {title} (id={id})",
 
         # AI
-        "ai_welcome": "🤖 Включён режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
+        "ai_welcome": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
         "ai_intro": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
         "ai_no_key": "Извините, ИИ пока не настроен.",
         "ai_empty": "Пожалуйста, напишите свой вопрос.",
