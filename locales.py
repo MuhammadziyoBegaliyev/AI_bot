@@ -1,4 +1,4 @@
-# path: locales.py
+
 
 LOCALES = {
     "uz": {
@@ -38,11 +38,21 @@ LOCALES = {
         "dose_calc": "🧮 Doza kalkulyatori",
         "more_search": "➕ Yana qidirish",
 
-        # Feedback flow
-        "feedback_ask": "Fikringizni yozing:",
-        "feedback_got": "Rahmat! Fikringiz qabul qilindi.",
-        "complaint_ask": "Shikoyatingizni yozing (ixtiyoriy rasm/lokatsiya jo'nating).",
-        "complaint_ok": "Xabaringiz yuborildi.",
+        # Feedback & Complaint (user flow)
+        "fb_enter_title": "Iltimos, quyidagidan birini tanlang:",
+        "fb_btn_feedback": "🟢 Fikr bildirish",
+        "fb_btn_complaint": "🔴 Shikoyat qilish",
+        "fb_ask_text": "Fikringizni yozib yuboring:",
+        "fb_thanks": "Rahmat! Fikringiz qabul qilindi. Iltimos, baholang:",
+        "fb_rated": "Rahmat! Bahoyingiz qabul qilindi.",
+        "cmp_ask_text": "Shikoyatingizni batafsil yozib yuboring:",
+        "cmp_after_text": "Qo‘shimcha ma’lumot yuborishingiz mumkin:",
+        "cmp_btn_photo": "📷 Rasm yuborish",
+        "cmp_btn_loc": "📍 Lokatsiyani yuborish",
+        "cmp_btn_send": "✅ Shikoyatni yuborish",
+        "cmp_photo_saved": "Rasm qabul qilindi.",
+        "cmp_loc_saved": "Lokatsiya qabul qilindi.",
+        "cmp_sent": "Shikoyatingiz yuborildi. Rahmat!",
 
         # Locations (user)
         "loc_menu_title": "Lokatsiyalar bo‘limi:",
@@ -90,7 +100,7 @@ LOCALES = {
         "adm_ph_link": "Xarita havolasi (yo‘q bo‘lsa '-' yozing):",
         "adm_ph_saved": "✅ Apteka qo‘shildi: {title} (id={id})",
 
-        # AI (handlers/ai_chat.py uchun to‘liq)
+        # AI
         "ai_welcome": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
         "ai_intro": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
         "ai_no_key": "Kechirasiz, AI hozircha sozlanmagan.",
@@ -137,11 +147,23 @@ LOCALES = {
         "dose_calc": "🧮 Dose calculator",
         "more_search": "➕ Search more",
 
-        "feedback_ask": "Write your feedback:",
-        "feedback_got": "Thanks! Received.",
-        "complaint_ask": "Write your complaint (you may add photo/location).",
-        "complaint_ok": "Your report is sent.",
+        # Feedback & Complaint
+        "fb_enter_title": "Please choose one:",
+        "fb_btn_feedback": "🟢 Send feedback",
+        "fb_btn_complaint": "🔴 File a complaint",
+        "fb_ask_text": "Write your feedback:",
+        "fb_thanks": "Thanks! Received. Please rate:",
+        "fb_rated": "Thanks! Your rating is saved.",
+        "cmp_ask_text": "Describe your complaint in detail:",
+        "cmp_after_text": "You can attach more info:",
+        "cmp_btn_photo": "📷 Send a photo",
+        "cmp_btn_loc": "📍 Send location",
+        "cmp_btn_send": "✅ Submit complaint",
+        "cmp_photo_saved": "Photo saved.",
+        "cmp_loc_saved": "Location saved.",
+        "cmp_sent": "Your complaint has been sent. Thank you!",
 
+        # Locations
         "loc_menu_title": "Locations menu:",
         "loc_btn_nearest": "📍 Nearest location",
         "loc_btn_all": "📍 All locations",
@@ -153,10 +175,12 @@ LOCALES = {
         "nearest_prefix": "Nearest location:",
         "loc_sent_caption": "📍 {title}\n{address}",
 
+        # Admin – common
         "admin": "🛠 Admin panel",
         "admin_only": "This section is for admins only.",
         "skip": "skip",
 
+        # Admin – locations
         "admin_loc_add": "➕ Add location",
         "admin_loc_title": "Send the branch title (e.g., Chilonzor pharmacy).",
         "admin_loc_address": "Send the address.",
@@ -164,6 +188,7 @@ LOCALES = {
         "admin_loc_ask_point": "📍 Now send the location (use the \"Send current location\" button).",
         "admin_loc_saved": "✅ Location saved.",
 
+        # Admin – drug CRUD
         "adm_drug_name": "Drug name:",
         "adm_drug_uses": "Uses:",
         "adm_drug_side": "Side effects:",
@@ -176,6 +201,7 @@ LOCALES = {
         "adm_deleted": "🗑 Deleted.",
         "adm_wrong_number": "❗️ Invalid format. Please enter a number.",
 
+        # Admin – pharmacy CRUD
         "adm_ph_title": "Pharmacy (branch) title:",
         "adm_ph_lat": "Latitude (e.g., 41.285):",
         "adm_ph_lon": "Longitude:",
@@ -183,6 +209,7 @@ LOCALES = {
         "adm_ph_link": "Map URL (type '-' if none):",
         "adm_ph_saved": "✅ Pharmacy added: {title} (id={id})",
 
+        # AI
         "ai_welcome": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
         "ai_intro": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
         "ai_no_key": "Sorry, AI is not configured yet.",
@@ -229,11 +256,23 @@ LOCALES = {
         "dose_calc": "🧮 Калькулятор доз",
         "more_search": "➕ Ещё поиск",
 
-        "feedback_ask": "Напишите отзыв:",
-        "feedback_got": "Спасибо! Получено.",
-        "complaint_ask": "Опишите жалобу (можно приложить фото/локацию).",
-        "complaint_ok": "Отправлено.",
+        # Feedback & Complaint
+        "fb_enter_title": "Пожалуйста, выберите действие:",
+        "fb_btn_feedback": "🟢 Оставить отзыв",
+        "fb_btn_complaint": "🔴 Оставить жалобу",
+        "fb_ask_text": "Напишите ваш отзыв:",
+        "fb_thanks": "Спасибо! Получено. Пожалуйста, оцените:",
+        "fb_rated": "Спасибо! Ваша оценка сохранена.",
+        "cmp_ask_text": "Опишите вашу жалобу подробно:",
+        "cmp_after_text": "Вы можете добавить больше информации:",
+        "cmp_btn_photo": "📷 Отправить фото",
+        "cmp_btn_loc": "📍 Отправить локацию",
+        "cmp_btn_send": "✅ Отправить жалобу",
+        "cmp_photo_saved": "Фото сохранено.",
+        "cmp_loc_saved": "Локация сохранена.",
+        "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
 
+        # Locations
         "loc_menu_title": "Меню локаций:",
         "loc_btn_nearest": "📍 Ближайшая локация",
         "loc_btn_all": "📍 Все локации",
@@ -245,10 +284,12 @@ LOCALES = {
         "nearest_prefix": "Ближайшая локация:",
         "loc_sent_caption": "📍 {title}\n{address}",
 
+        # Admin – common
         "admin": "🛠 Админ-панель",
         "admin_only": "Этот раздел только для администраторов.",
         "skip": "пропустить",
 
+        # Admin – locations
         "admin_loc_add": "➕ Добавить локацию",
         "admin_loc_title": "Отправьте название филиала (например: Чиланзар аптека).",
         "admin_loc_address": "Отправьте адрес.",
@@ -256,6 +297,7 @@ LOCALES = {
         "admin_loc_ask_point": "📍 Теперь отправьте геолокацию (кнопка «Отправить текущую локацию»).",
         "admin_loc_saved": "✅ Локация сохранена.",
 
+        # Admin – drug CRUD
         "adm_drug_name": "Название препарата:",
         "adm_drug_uses": "Показания:",
         "adm_drug_side": "Побочные эффекты:",
@@ -268,6 +310,7 @@ LOCALES = {
         "adm_deleted": "🗑 Удалено.",
         "adm_wrong_number": "❗️ Неверный формат. Введите число.",
 
+        # Admin – pharmacy CRUD
         "adm_ph_title": "Название аптеки (филиала):",
         "adm_ph_lat": "Широта (например, 41.285):",
         "adm_ph_lon": "Долгота:",
@@ -275,6 +318,7 @@ LOCALES = {
         "adm_ph_link": "Ссылка на карту (если нет — «-»):",
         "adm_ph_saved": "✅ Аптека добавлена: {title} (id={id})",
 
+        # AI
         "ai_welcome": "🤖 Включён режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
         "ai_intro": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
         "ai_no_key": "Извините, ИИ пока не настроен.",

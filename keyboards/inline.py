@@ -1,5 +1,7 @@
+# path: keyboards/inline.py
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from locales import LOCALES
+
 
 def back_kb(lang: str, to: str = "menu") -> InlineKeyboardMarkup:
     """Universal 'Back' tugmasi."""
@@ -9,8 +11,11 @@ def back_kb(lang: str, to: str = "menu") -> InlineKeyboardMarkup:
         ]
     )
 
+
 def drug_actions(lang: str, drug_id: int) -> InlineKeyboardMarkup:
-    """Dori kartasi ostidagi tugmalar: doza kalkulyatori, yana qidirish, orqaga."""
+    """
+    Dori kartasi ostidagi tugmalar: doza kalkulyatori, yana qidirish, orqaga.
+    """
     t = LOCALES[lang]
     return InlineKeyboardMarkup(
         inline_keyboard=[
@@ -20,12 +25,74 @@ def drug_actions(lang: str, drug_id: int) -> InlineKeyboardMarkup:
         ]
     )
 
+
+# ===============================
+#  FIKR / SHIKOYAT OQIMI (YANGI)
+# ===============================
+def fb_type_kb(lang: str) -> InlineKeyboardMarkup:
+    """
+    Foydalanuvchi 'Fikr bildirish' bo'limiga kirganda tur tanlash:
+    - 🟩 Fikr bildirish
+    - 🟥 Shikoyat qilish
+    """
+    t = LOCALES[lang]
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [InlineKeyboardButton(text=t["fb_btn_feedback"], callback_data="fb:type:review")],
+            [InlineKeyboardButton(text=t["fb_btn_complaint"], callback_data="fb:type:complaint")],
+            [InlineKeyboardButton(text=t["back"], callback_data="back:menu")],
+        ]
+    )
+
+
+def fb_stars_kb(lang: str) -> InlineKeyboardMarkup:
+    """
+    5 yulduzli baholash – 3 ta yuqorida, 2 ta pastda (sig‘ishi uchun).
+    callback: fb:rate:{1..5}
+    """
+    t = LOCALES[lang]
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text="⭐️ 1", callback_data="fb:rate:1"),
+                InlineKeyboardButton(text="⭐️ 2", callback_data="fb:rate:2"),
+                InlineKeyboardButton(text="⭐️ 3", callback_data="fb:rate:3"),
+            ],
+            [
+                InlineKeyboardButton(text="⭐️ 4", callback_data="fb:rate:4"),
+                InlineKeyboardButton(text="⭐️ 5", callback_data="fb:rate:5"),
+            ],
+            [InlineKeyboardButton(text=t["back"], callback_data="back:menu")],
+        ]
+    )
+
+
+def complaint_actions_kb(lang: str) -> InlineKeyboardMarkup:
+    """
+    Shikoyat matnidan keyingi tugmalar:
+    - 📷 Rasm yuborish (fb:cphoto)
+    - 📍 Lokatsiyani yuborish (fb:cloc)
+    - ✅ Shikoyatni yuborish (fb:csend)
+    """
+    t = LOCALES[lang]
+    return InlineKeyboardMarkup(
+        inline_keyboard=[
+            [
+                InlineKeyboardButton(text=t["cmp_btn_photo"], callback_data="fb:cphoto"),
+                InlineKeyboardButton(text=t["cmp_btn_loc"], callback_data="fb:cloc"),
+            ],
+            [InlineKeyboardButton(text=t["cmp_btn_send"], callback_data="fb:csend")],
+            [InlineKeyboardButton(text=t["back"], callback_data="back:menu")],
+        ]
+    )
+
+
+# (ESKI, agar boshqa joylarda ishlatilayotgan bo‘lsa — qolsin)
 def feedback_inline(lang: str, fb_id: int) -> InlineKeyboardMarkup:
     """
-    Fikr yuborilgach chiqadigan tugmalar:
-    - 1..5 yulduzli baholash (callback: rate:{fb_id}:{1..5})
-    - 🚩 Shikoyat / Complaint / Жалоба (callback: complain:{fb_id})
-    - ⬅️ Orqaga (menu)
+    Legacy: Fikr yuborilgach chiqadigan tugmalar (yulduzlar bitta qatorda).
+    Hozir yangi oqimdan foydalanamiz (fb_stars_kb), lekin bu funksiya
+    orqaga moslik uchun saqlab qo'yildi.
     """
     complaint_text = {
         "uz": "🚩 Shikoyat",
@@ -46,7 +113,10 @@ def feedback_inline(lang: str, fb_id: int) -> InlineKeyboardMarkup:
         ]
     )
 
-# (ixtiyoriy) Lokatsiya bo‘limi uchun inline klaviaturalar
+
+# ===============================
+#  LOKATSIYALAR BO'LIMI
+# ===============================
 def locations_menu_inline(lang: str) -> InlineKeyboardMarkup:
     t = LOCALES[lang]
     return InlineKeyboardMarkup(
@@ -57,11 +127,14 @@ def locations_menu_inline(lang: str) -> InlineKeyboardMarkup:
         ]
     )
 
+
 def locations_list_inline(lang: str, items: list) -> InlineKeyboardMarkup:
     t = LOCALES[lang]
     rows = []
     for loc in items:
-        rows.append([InlineKeyboardButton(text=f"📍 {loc.title}", callback_data=f"locgo:{loc.id}")])
+        rows.append(
+            [InlineKeyboardButton(text=f"📍 {loc.title}", callback_data=f"locgo:{loc.id}")]
+        )
     rows.append([InlineKeyboardButton(text=t["loc_btn_nearest"], callback_data="locmenu:nearest")])
     rows.append([InlineKeyboardButton(text=t["back"], callback_data="back:menu")])
     return InlineKeyboardMarkup(inline_keyboard=rows)

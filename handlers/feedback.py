@@ -1,125 +1,193 @@
+# path: handlers/feedback.py
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from states.feedback import FeedbackFlow
-from locales import LOCALES
-from database import SessionLocal
-from database.crud import (
-    create_feedback, set_feedback_rating,
-    attach_complaint_photo, attach_complaint_location
-)
-from config import settings
-from keyboards.inline import feedback_inline, back_kb
+
 from filters.registered import RegisteredFilter
+from locales import LOCALES
 from utils.lang import get_lang
-from sqlalchemy import select
-from database.models import Feedback as FeedbackModel, User as UserModel
+
+from states.feedback import FeedbackFlow
+from database import SessionLocal
+from database.crud import create_feedback, set_feedback_rating
+from database.crud import get_user_by_tg  # foydalanuvchi ma'lumoti uchun
+
+from keyboards.inline import fb_type_kb, fb_stars_kb, complaint_actions_kb
+from keyboards.reply import main_menu
+from config import settings
 
 router = Router()
 
-@router.message(RegisteredFilter(), F.text.in_({"💬 Fikr bildirish","💬 Feedback","💬 Отзыв"}))
-async def ask_feedback(message: Message, state: FSMContext):
-    # DB'dagi tanlangan tilni o'qiymiz
+# ====== KIRISH: "💬 Fikr bildirish" (main menu dan) ======
+@router.message(RegisteredFilter(), F.text.in_({"💬 Fikr bildirish", "💬 Feedback", "💬 Отзыв"}))
+async def fb_enter(message: Message, state: FSMContext):
     lang = await get_lang(message.from_user.id)
-    await state.clear()
-    await state.set_state(FeedbackFlow.waiting_text)
-    await message.answer(LOCALES[lang]["feedback_ask"])
+    await state.set_state(FeedbackFlow.choosing_type)
+    await message.answer(LOCALES[lang]["fb_choose"], reply_markup=fb_type_kb(lang))
 
-@router.message(RegisteredFilter(), FeedbackFlow.waiting_text, F.text)
-async def got_feedback(message: Message, state: FSMContext):
-    lang = await get_lang(message.from_user.id)
-    async with SessionLocal() as db:
-        fb = await create_feedback(db, user_id=message.from_user.id, text=message.text)
-    # Guruhga yuborish
-    await message.bot.send_message(
-        settings.GROUP_ID,
-        f"💬 Feedback by @{message.from_user.username or '-'} (id={message.from_user.id})\n"
-        f"Lang: {lang}\nText: {message.text}"
-    )
-    await message.answer(LOCALES[lang]["feedback_got"], reply_markup=feedback_inline(lang, fb.id))
-    await state.clear()
-
-@router.callback_query(RegisteredFilter(), F.data.startswith("rate:"))
-async def rate_cb(cb: CallbackQuery):
-    # callback: rate:<fb_id>:<rating>
-    _, fb_id_str, rating_str = cb.data.split(":")
-    fb_id, rating = int(fb_id_str), int(rating_str)
-
-    async with SessionLocal() as db:
-        fb = await set_feedback_rating(db, fb_id, rating)
-        if not getattr(fb, "text", None):
-            res = await db.execute(select(FeedbackModel).where(FeedbackModel.id == fb_id))
-            fb = res.scalar_one()
-        ures = await db.execute(select(UserModel).where(UserModel.id == fb.user_id))
-        u = ures.scalar_one_or_none()
-
+# ====== TUR TANLASH: Fikr / Shikoyat ======
+@router.callback_query(F.data.startswith("fb:type:"))
+async def fb_choose_type(cb: CallbackQuery, state: FSMContext):
     lang = await get_lang(cb.from_user.id)
-    await cb.message.answer(f"⭐ {rating}/5", reply_markup=back_kb(lang, "menu"))
+    _, _, ftype = cb.data.split(":")
+    if ftype == "review":
+        # baho -> matn
+        await state.set_state(FeedbackFlow.rating_wait)
+        await cb.message.edit_text(LOCALES[lang]["fb_rate_ask"], reply_markup=fb_stars_kb(lang))
+    else:
+        # shikoyat matni
+        await state.set_state(FeedbackFlow.complaint_text)
+        await cb.message.edit_text(LOCALES[lang]["cmp_ask_text"], reply_markup=complaint_actions_kb(lang))
+    await cb.answer()
 
-    # Guruhga xabar
-    uname = f"@{cb.from_user.username}" if cb.from_user.username else (u.full_name if u else str(cb.from_user.id))
-    phone = (u.phone if u and u.phone else "-")
-    link = (u.link if u and u.link else "-")
-    txt = (
-        "💬 Yangi fikr (baho bilan)\n"
-        f"User: {uname} (tg_id={cb.from_user.id})\n"
-        f"Telefon: {phone}\n"
-        f"Link: {link}\n"
-        f"Til: {lang}\n"
-        f"⭐ Baho: {rating}/5\n"
-        f"Matn: {fb.text}"
+# ====== BAHO TANLASH (1..5) ======
+@router.callback_query(F.data.startswith("fb:rate:"))
+async def fb_rate(cb: CallbackQuery, state: FSMContext):
+    lang = await get_lang(cb.from_user.id)
+    rating = int(cb.data.split(":")[2])
+    await state.update_data(rating=rating)
+    await state.set_state(FeedbackFlow.review_text)
+    await cb.message.edit_text(LOCALES[lang]["fb_text_ask"])
+    await cb.answer()
+
+# ====== FIKR MATNI QABULI ======
+@router.message(FeedbackFlow.review_text, F.text)
+async def fb_got_review(message: Message, state: FSMContext):
+    lang = await get_lang(message.from_user.id)
+    t = LOCALES[lang]
+    data = await state.get_data()
+    rating = int(data.get("rating", 0) or 0)
+    text = message.text.strip()
+
+    # DB ga yozish
+    async with SessionLocal() as db:
+        fb = await create_feedback(db, user_id=message.from_user.id, text=text)
+        if rating:
+            await set_feedback_rating(db, fb.id, rating)
+
+        # foydalanuvchi profilini oldik
+        u = await get_user_by_tg(db, message.from_user.id)
+
+    # Guruhga yuborish
+    await _send_to_group_review(message, lang, rating, text, u)
+
+    await state.clear()
+    await message.answer(t["fb_thanks"], reply_markup=main_menu(lang))
+
+# ====== SHIKOYAT MATNI QABULI ======
+@router.message(FeedbackFlow.complaint_text, F.text)
+async def cmp_got_text(message: Message, state: FSMContext):
+    lang = await get_lang(message.from_user.id)
+    await state.update_data(text=message.text.strip(), photo_id=None, loc=None)
+    await state.set_state(FeedbackFlow.complaint_add)
+    await message.answer(LOCALES[lang]["cmp_more"], reply_markup=complaint_actions_kb(lang))
+
+# ====== SHIKOYAT: "Rasm yuborish" tugmasi ======
+@router.callback_query(FeedbackFlow.complaint_add, F.data == "fb:cphoto")
+async def cmp_want_photo(cb: CallbackQuery, state: FSMContext):
+    lang = await get_lang(cb.from_user.id)
+    await state.set_state(FeedbackFlow.waiting_photo)
+    await cb.message.answer(LOCALES[lang]["cmp_send_photo"])
+    await cb.answer()
+
+# ====== SHIKOYAT: Foydalanuvchi rasm yuboradi ======
+@router.message(FeedbackFlow.waiting_photo, F.photo)
+async def cmp_got_photo(message: Message, state: FSMContext):
+    lang = await get_lang(message.from_user.id)
+    file_id = message.photo[-1].file_id
+    await state.update_data(photo_id=file_id)
+    await state.set_state(FeedbackFlow.complaint_add)
+    await message.answer(LOCALES[lang]["cmp_photo_ok"], reply_markup=complaint_actions_kb(lang))
+
+# ====== SHIKOYAT: "Lokatsiyani yuborish" tugmasi ======
+@router.callback_query(FeedbackFlow.complaint_add, F.data == "fb:cloc")
+async def cmp_want_loc(cb: CallbackQuery, state: FSMContext):
+    lang = await get_lang(cb.from_user.id)
+    await state.set_state(FeedbackFlow.waiting_location)
+    await cb.message.answer(LOCALES[lang]["cmp_send_loc"])
+    await cb.answer()
+
+# ====== SHIKOYAT: Lokatsiya qabul qilish ======
+@router.message(FeedbackFlow.waiting_location, F.location)
+async def cmp_got_loc(message: Message, state: FSMContext):
+    lang = await get_lang(message.from_user.id)
+    loc = (message.location.latitude, message.location.longitude)
+    await state.update_data(loc=loc)
+    await state.set_state(FeedbackFlow.complaint_add)
+    await message.answer(LOCALES[lang]["cmp_loc_ok"], reply_markup=complaint_actions_kb(lang))
+
+# ====== SHIKOYAT: "Yuborish" tugmasi ======
+@router.callback_query(FeedbackFlow.complaint_add, F.data == "fb:csend")
+async def cmp_send(cb: CallbackQuery, state: FSMContext):
+    lang = await get_lang(cb.from_user.id)
+    t = LOCALES[lang]
+    data = await state.get_data()
+    text = data.get("text", "")
+    photo_id = data.get("photo_id")
+    loc = data.get("loc")
+
+    # DB — oddiy feedback sifatida saqlaymiz (type yo'q, text mavjud)
+    async with SessionLocal() as db:
+        fb = await create_feedback(db, user_id=cb.from_user.id, text=text)
+        # complaint_photo_id/complaint_location larni update qilish:
+        if photo_id:
+            from database.crud import attach_complaint_photo
+            await attach_complaint_photo(db, fb.id, photo_id)
+        if loc:
+            from database.crud import attach_complaint_location
+            await attach_complaint_location(db, fb.id, float(loc[0]), float(loc[1]))
+
+        u = await get_user_by_tg(db, cb.from_user.id)
+
+    # Guruhga yuborish (shikoyat ko‘k-qizil bilan)
+    await _send_to_group_complaint(cb, lang, text, u, photo_id, loc)
+
+    await state.clear()
+    await cb.message.edit_text(t["cmp_sent"])
+    await cb.message.answer(t["menu"], reply_markup=main_menu(lang))
+    await cb.answer()
+
+# ====== Yordamchi: guruhga yuborish formatlari ======
+def _fmt_user_block(lang: str, u) -> str:
+    t = LOCALES[lang]
+    # username may be None
+    username = f"@{u.username}" if getattr(u, "username", None) else "-"
+    return (
+        f"{t['grp_lang']}: {lang}\n"
+        f"{t['grp_user']}: {u.full_name or '-'} ({username})\n"
+        f"{t['grp_contact']}: {u.phone or '-'}\n"
+        f"{t['grp_age']}: {u.age or '-'}"
     )
+
+async def _send_to_group_review(message: Message, lang: str, rating: int, text: str, u):
+    gid = int(getattr(settings, "GROUP_ID", 0) or 0)
+    if not gid:
+        return
+    t = LOCALES[lang]
+    tag = t["grp_tag_feedback"]  # 🟢
+    block = _fmt_user_block(lang, u)
+    caption = f"{tag} {t['grp_feedback']}\n\n{block}\n\n{t['grp_text']}: {text}\n{t['grp_rating']}: {rating}/5"
     try:
-        await cb.message.bot.send_message(settings.GROUP_ID, txt)
+        await message.bot.send_message(gid, caption)
     except Exception:
         pass
 
-    await cb.answer()
-
-@router.callback_query(RegisteredFilter(), F.data.startswith("complain:"))
-async def complaint_start(cb: CallbackQuery, state: FSMContext):
-    lang = await get_lang(cb.from_user.id)
-    fb_id = int(cb.data.split(":")[1])
-    await state.set_state(FeedbackFlow.waiting_complaint_text)
-    await state.update_data(fb_id=fb_id)
-    await cb.message.answer(LOCALES[lang]["complaint_ask"], reply_markup=back_kb(lang, "menu"))
-    await cb.answer()
-
-@router.message(RegisteredFilter(), FeedbackFlow.waiting_complaint_text, F.text)
-async def complaint_text_ok(message: Message, state: FSMContext):
-    lang = await get_lang(message.from_user.id)
-    data = await state.get_data(); fb_id = data["fb_id"]
-    await message.bot.send_message(
-        settings.GROUP_ID,
-        f"🚩 Complaint by @{message.from_user.username or '-'} (id={message.from_user.id})\n"
-        f"Lang: {lang}\nText: {message.text}"
-    )
-    await state.set_state(FeedbackFlow.waiting_complaint_photo)
-    await message.answer("Rasm yuboring (ixtiyoriy), yoki o'tkazish uchun matn yuboring.")
-
-@router.message(RegisteredFilter(), FeedbackFlow.waiting_complaint_photo, F.photo)
-async def complaint_photo_ok(message: Message, state: FSMContext):
-    file_id = message.photo[-1].file_id
-    data = await state.get_data(); fb_id = data["fb_id"]
-    async with SessionLocal() as db:
-        await attach_complaint_photo(db, fb_id, file_id)
-    await message.answer("Rasm qabul qilindi. Lokatsiya yuborsangiz bo‘ladi (ixtiyoriy).")
-    await state.set_state(FeedbackFlow.waiting_complaint_location)
-
-@router.message(RegisteredFilter(), FeedbackFlow.waiting_complaint_photo, F.text)
-async def complaint_photo_skip(message: Message, state: FSMContext):
-    await message.answer("Rasm o'tkazib yuborildi. Lokatsiya yuborsangiz bo‘ladi (ixtiyoriy).")
-    await state.set_state(FeedbackFlow.waiting_complaint_location)
-
-@router.message(RegisteredFilter(), FeedbackFlow.waiting_complaint_location, F.location)
-async def complaint_loc_ok(message: Message, state: FSMContext):
-    data = await state.get_data(); fb_id = data["fb_id"]
-    async with SessionLocal() as db:
-        await attach_complaint_location(db, fb_id, message.location.latitude, message.location.longitude)
-    await message.answer("Lokatsiya qabul qilindi. Rahmat!")
-    await state.clear()
-
-@router.message(RegisteredFilter(), FeedbackFlow.waiting_complaint_location, F.text)
-async def complaint_loc_skip(message: Message, state: FSMContext):
-    await message.answer("Lokatsiyasiz yakunlandi. Rahmat!")
-    await state.clear()
+async def _send_to_group_complaint(cb: CallbackQuery, lang: str, text: str, u, photo_id: str | None, loc: tuple | None):
+    gid = int(getattr(settings, "GROUP_ID", 0) or 0)
+    if not gid:
+        return
+    t = LOCALES[lang]
+    tag = t["grp_tag_complaint"]  # 🔴
+    block = _fmt_user_block(lang, u)
+    caption = f"{tag} {t['grp_complaint']}\n\n{block}\n\n{t['grp_text']}: {text}"
+    bot = cb.message.bot
+    try:
+        if photo_id:
+            await bot.send_photo(gid, photo_id, caption=caption)
+        else:
+            await bot.send_message(gid, caption)
+        if loc:
+            lat, lon = loc
+            await bot.send_location(gid, latitude=lat, longitude=lon)
+    except Exception:
+        pass
