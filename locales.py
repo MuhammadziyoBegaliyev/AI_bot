@@ -53,6 +53,7 @@ LOCALES = {
         "cmp_photo_saved": "Rasm qabul qilindi.",
         "cmp_loc_saved": "Lokatsiya qabul qilindi.",
         "cmp_sent": "Shikoyatingiz yuborildi. Rahmat!",
+        "fb_choose": "Iltimos, quyidagidan birini tanlang:",
 
         # Locations (user)
         "loc_menu_title": "Lokatsiyalar bo‘limi:",
@@ -162,6 +163,7 @@ LOCALES = {
         "cmp_photo_saved": "Photo saved.",
         "cmp_loc_saved": "Location saved.",
         "cmp_sent": "Your complaint has been sent. Thank you!",
+        "fb_choose": "Please choose one:",
 
         # Locations
         "loc_menu_title": "Locations menu:",
@@ -271,6 +273,7 @@ LOCALES = {
         "cmp_photo_saved": "Фото сохранено.",
         "cmp_loc_saved": "Локация сохранена.",
         "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
+        "fb_choose": "Пожалуйста, выберите действие:",
 
         # Locations
         "loc_menu_title": "Меню локаций:",
