@@ -67,3 +67,21 @@ async def back_to_lang(cb: CallbackQuery, state: FSMContext):
     lang = await get_lang(cb.from_user.id)
     await cb.message.answer(LOCALES[lang]["choose_lang"], reply_markup=lang_kb())
     await cb.answer()
+
+
+
+
+
+
+
+
+
+
+# from utils.lang import get_lang
+
+
+
+# @router.message()
+# async def fallback(message: Message):
+#     lang = await get_lang(message.from_user.id)
+#     await message.answer(LOCALES[lang]["menu"])

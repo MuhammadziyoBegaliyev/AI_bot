@@ -4,7 +4,7 @@ LOCALES = {
     "uz": {
         # Greeting / onboarding
         "welcome": "Assalomu alaykum! Farmatsevtika botiga xush kelibsiz!",
-        "hello":   "Assalomu alaykum! Farmatsevtika botiga xush kelibsiz!",
+        "hello": "Assalomu alaykum! Farmatsevtika botiga xush kelibsiz!",
         "choose_lang": "Iltimos, tilni tanlang:",
         "need_register": "Iltimos, avval ro'yxatdan o'ting.",
 
@@ -90,27 +90,26 @@ LOCALES = {
         "adm_ph_link": "Xarita havolasi (yo‘q bo‘lsa '-' yozing):",
         "adm_ph_saved": "✅ Apteka qo‘shildi: {title} (id={id})",
 
-        # AI (keys expected by handlers/ai_chat.py)
-        "btn_ai": "🤖 Sun'iy intellekt",
+        # AI (handlers/ai_chat.py uchun to‘liq)
+        "ai_welcome": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
         "ai_intro": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
         "ai_no_key": "Kechirasiz, AI hozircha sozlanmagan.",
         "ai_empty": "Iltimos, savolingizni yozing.",
         "ai_thinking": "Yozayapman…",
         "ai_fail": "Kechirasiz, hozir javob bera olmadim.",
         "ai_no_image": "Hali rasmga javob berishni yoqmadi. Matn yuboring.",
+        "ai_stopped": "Suhbat yakunlandi.",
         "ai_ended": "Suhbat yakunlandi.",
+        "ai_rate_limited": "Hozircha ko‘p so‘rov yuborildi yoki kvota tugagan. Birozdan so‘ng yana urinib ko‘ring.",
         "ai_system_prompt": "Siz foydali va qisqa javob beradigan yordamchisiz. Javobni foydalanuvchi tilida bering.",
-
     },
 
     "en": {
-        # Greeting / onboarding
         "welcome": "Welcome to the Pharmaceutics bot!",
-        "hello":   "Welcome to the Pharmaceutics bot!",
+        "hello": "Welcome to the Pharmaceutics bot!",
         "choose_lang": "Please choose a language:",
         "need_register": "Please register first.",
 
-        # Main menu & buttons
         "menu": "Main menu:",
         "back": "⬅️ Back",
         "btn_search": "🔎 Search",
@@ -119,13 +118,11 @@ LOCALES = {
         "btn_locations": "📍 Locations",
         "btn_ai": "🤖 AI Assistant",
 
-        # Register flow
         "reg_name": "Send your full name (e.g., John Doe).",
         "reg_contact": "Share your phone as a contact or type it.",
         "reg_age": "Enter your age (e.g., 23).",
         "reg_done": "You're registered!",
 
-        # Search flow
         "search_ask": "Type a drug name or send a photo.",
         "search_none": "Sorry, nothing found. Try another name or photo.",
         "drug_info": "🧪 Drug information",
@@ -140,13 +137,11 @@ LOCALES = {
         "dose_calc": "🧮 Dose calculator",
         "more_search": "➕ Search more",
 
-        # Feedback flow
         "feedback_ask": "Write your feedback:",
         "feedback_got": "Thanks! Received.",
         "complaint_ask": "Write your complaint (you may add photo/location).",
         "complaint_ok": "Your report is sent.",
 
-        # Locations (user)
         "loc_menu_title": "Locations menu:",
         "loc_btn_nearest": "📍 Nearest location",
         "loc_btn_all": "📍 All locations",
@@ -158,12 +153,10 @@ LOCALES = {
         "nearest_prefix": "Nearest location:",
         "loc_sent_caption": "📍 {title}\n{address}",
 
-        # Admin – common
         "admin": "🛠 Admin panel",
         "admin_only": "This section is for admins only.",
         "skip": "skip",
 
-        # Admin – locations
         "admin_loc_add": "➕ Add location",
         "admin_loc_title": "Send the branch title (e.g., Chilonzor pharmacy).",
         "admin_loc_address": "Send the address.",
@@ -171,7 +164,6 @@ LOCALES = {
         "admin_loc_ask_point": "📍 Now send the location (use the \"Send current location\" button).",
         "admin_loc_saved": "✅ Location saved.",
 
-        # Admin – drug CRUD
         "adm_drug_name": "Drug name:",
         "adm_drug_uses": "Uses:",
         "adm_drug_side": "Side effects:",
@@ -184,7 +176,6 @@ LOCALES = {
         "adm_deleted": "🗑 Deleted.",
         "adm_wrong_number": "❗️ Invalid format. Please enter a number.",
 
-        # Admin – pharmacy CRUD
         "adm_ph_title": "Pharmacy (branch) title:",
         "adm_ph_lat": "Latitude (e.g., 41.285):",
         "adm_ph_lon": "Longitude:",
@@ -192,27 +183,25 @@ LOCALES = {
         "adm_ph_link": "Map URL (type '-' if none):",
         "adm_ph_saved": "✅ Pharmacy added: {title} (id={id})",
 
-        # AI
-        "btn_ai": "🤖 AI Assistant",
+        "ai_welcome": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
         "ai_intro": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
         "ai_no_key": "Sorry, AI is not configured yet.",
         "ai_empty": "Please type your question.",
         "ai_thinking": "Thinking…",
         "ai_fail": "Sorry, I couldn't answer now.",
         "ai_no_image": "Image inputs are not supported yet. Please send text.",
+        "ai_stopped": "Chat ended.",
         "ai_ended": "Chat ended.",
+        "ai_rate_limited": "Too many requests or quota exceeded. Please try again shortly.",
         "ai_system_prompt": "You are a helpful, concise assistant. Answer in the user's language.",
-
     },
 
     "ru": {
-        # Greeting / onboarding
         "welcome": "Добро пожаловать в фарма-бота!",
-        "hello":   "Добро пожаловать в фарма-бота!",
+        "hello": "Добро пожаловать в фарма-бота!",
         "choose_lang": "Пожалуйста, выберите язык:",
         "need_register": "Пожалуйста, сначала зарегистрируйтесь.",
 
-        # Main menu & buttons
         "menu": "Главное меню:",
         "back": "⬅️ Назад",
         "btn_search": "🔎 Поиск",
@@ -221,13 +210,11 @@ LOCALES = {
         "btn_locations": "📍 Локации",
         "btn_ai": "🤖 ИИ-помощник",
 
-        # Register flow
         "reg_name": "Отправьте ФИО (например: Иван Иванов).",
         "reg_contact": "Отправьте телефон контактом или введите его.",
         "reg_age": "Введите ваш возраст (например: 23).",
         "reg_done": "Вы зарегистрированы!",
 
-        # Search flow
         "search_ask": "Введите название лекарства или отправьте фото.",
         "search_none": "К сожалению, ничего не найдено. Попробуйте другое название/фото.",
         "drug_info": "🧪 Информация о препарате",
@@ -242,13 +229,11 @@ LOCALES = {
         "dose_calc": "🧮 Калькулятор доз",
         "more_search": "➕ Ещё поиск",
 
-        # Feedback flow
         "feedback_ask": "Напишите отзыв:",
         "feedback_got": "Спасибо! Получено.",
         "complaint_ask": "Опишите жалобу (можно приложить фото/локацию).",
         "complaint_ok": "Отправлено.",
 
-        # Locations (user)
         "loc_menu_title": "Меню локаций:",
         "loc_btn_nearest": "📍 Ближайшая локация",
         "loc_btn_all": "📍 Все локации",
@@ -260,12 +245,10 @@ LOCALES = {
         "nearest_prefix": "Ближайшая локация:",
         "loc_sent_caption": "📍 {title}\n{address}",
 
-        # Admin – common
         "admin": "🛠 Админ-панель",
         "admin_only": "Этот раздел только для администраторов.",
         "skip": "пропустить",
 
-        # Admin – locations
         "admin_loc_add": "➕ Добавить локацию",
         "admin_loc_title": "Отправьте название филиала (например: Чиланзар аптека).",
         "admin_loc_address": "Отправьте адрес.",
@@ -273,7 +256,6 @@ LOCALES = {
         "admin_loc_ask_point": "📍 Теперь отправьте геолокацию (кнопка «Отправить текущую локацию»).",
         "admin_loc_saved": "✅ Локация сохранена.",
 
-        # Admin – drug CRUD
         "adm_drug_name": "Название препарата:",
         "adm_drug_uses": "Показания:",
         "adm_drug_side": "Побочные эффекты:",
@@ -286,7 +268,6 @@ LOCALES = {
         "adm_deleted": "🗑 Удалено.",
         "adm_wrong_number": "❗️ Неверный формат. Введите число.",
 
-        # Admin – pharmacy CRUD
         "adm_ph_title": "Название аптеки (филиала):",
         "adm_ph_lat": "Широта (например, 41.285):",
         "adm_ph_lon": "Долгота:",
@@ -294,16 +275,16 @@ LOCALES = {
         "adm_ph_link": "Ссылка на карту (если нет — «-»):",
         "adm_ph_saved": "✅ Аптека добавлена: {title} (id={id})",
 
-        # AI
-        "btn_ai": "🤖 ИИ-помощник",
+        "ai_welcome": "🤖 Включён режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
         "ai_intro": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
         "ai_no_key": "Извините, ИИ пока не настроен.",
         "ai_empty": "Пожалуйста, напишите свой вопрос.",
         "ai_thinking": "Печатаю…",
         "ai_fail": "Извините, сейчас не могу ответить.",
         "ai_no_image": "Изображения пока не поддерживаются. Отправьте текст.",
+        "ai_stopped": "Диалог завершён.",
         "ai_ended": "Диалог завершён.",
+        "ai_rate_limited": "Слишком много запросов или исчерпана квота. Попробуйте позже.",
         "ai_system_prompt": "Вы полезный и лаконичный ассистент. Отвечайте на языке пользователя.",
-
     },
 }

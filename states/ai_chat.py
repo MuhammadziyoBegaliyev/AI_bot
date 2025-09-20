@@ -1,4 +1,4 @@
-# path: handlers/ai_chat.py
+
 from aiogram import Router, F
 from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
@@ -12,25 +12,27 @@ from keyboards.reply import main_menu
 from config import settings
 
 try:
-    from openai import OpenAI
+    import httpx
+    from openai import OpenAI, APIStatusError
 except Exception:
     OpenAI = None
+    APIStatusError = Exception  # fallback
 
 router = Router()
 
-# --- per-user throttling ---
 RATE_LIMIT_SECONDS = 5
 _last_call_ts: dict[int, float] = {}
 
 def _client_or_none():
+    """OpenAI klienti: RETRY O‘CHIRILGAN, qisqa timeout bilan."""
     if OpenAI is None:
         return None
     api_key = getattr(settings, "OPENAI_API_KEY", "") or ""
     if not api_key:
         return None
     try:
-        # retries o'chirilgan – 429 bo'lsa darhol xabar beramiz
-        return OpenAI(api_key=api_key, max_retries=0, timeout=30)
+        http_client = httpx.Client(timeout=30.0)
+        return OpenAI(api_key=api_key, http_client=http_client, max_retries=0)
     except Exception:
         return None
 
@@ -59,7 +61,7 @@ async def ai_answer(message: Message, state: FSMContext):
         await message.answer(t["ai_no_key"], reply_markup=_ai_back_kb(lang))
         return
 
-    # simple per-user cooldown
+    # anti-spam: 5s cooldown
     now = time.time()
     if now - _last_call_ts.get(uid, 0) < RATE_LIMIT_SECONDS:
         await message.answer(t["ai_slow_down"], reply_markup=_ai_back_kb(lang))
@@ -71,7 +73,7 @@ async def ai_answer(message: Message, state: FSMContext):
         await message.answer(t["ai_empty"], reply_markup=_ai_back_kb(lang))
         return
 
-    thinking_msg = await message.answer(t["ai_thinking"], reply_markup=_ai_back_kb(lang))
+    thinking = await message.answer(t["ai_thinking"], reply_markup=_ai_back_kb(lang))
     system_prompt = t.get("ai_system_prompt", "You are a helpful, concise assistant. Answer in the user's language.")
 
     try:
@@ -79,7 +81,7 @@ async def ai_answer(message: Message, state: FSMContext):
             model="gpt-4o-mini",
             messages=[
                 {"role": "system", "content": system_prompt},
-                {"role": "user",   "content": user_text},
+                {"role": "user", "content": user_text},
             ],
             temperature=0.6,
             max_tokens=600,
@@ -87,15 +89,17 @@ async def ai_answer(message: Message, state: FSMContext):
         answer = (resp.choices[0].message.content if resp and resp.choices else None) or t["ai_fail"]
         if len(answer) > 3500:
             answer = answer[:3500] + " …"
-        await thinking_msg.edit_text(answer, reply_markup=_ai_back_kb(lang))
-    except Exception as e:
-        # OpenAI 1.x ko‘pincha APIStatusError beradi; unda status_code bo'ladi
+        await thinking.edit_text(answer, reply_markup=_ai_back_kb(lang))
+    except APIStatusError as e:
+        # 429 – rate limit
         if getattr(e, "status_code", None) == 429:
-            await thinking_msg.edit_text(t["ai_rate_limited"], reply_markup=_ai_back_kb(lang))
+            await thinking.edit_text(t["ai_rate_limited"], reply_markup=_ai_back_kb(lang))
         else:
-            await thinking_msg.edit_text(t["ai_fail"], reply_markup=_ai_back_kb(lang))
+            await thinking.edit_text(t["ai_fail"], reply_markup=_ai_back_kb(lang))
+    except Exception:
+        await thinking.edit_text(t["ai_fail"], reply_markup=_ai_back_kb(lang))
 
-@router.message(RegisteredFilter(), AIChat.chatting, ~F.text)  # matn bo'lmagan hamma narsaga
+@router.message(RegisteredFilter(), AIChat.chatting, ~F.text)
 async def ai_non_text(message: Message):
     lang = await get_lang(message.from_user.id)
     await message.answer(LOCALES[lang]["ai_text_only"], reply_markup=_ai_back_kb(lang))
