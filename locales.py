@@ -45,6 +45,12 @@ LOCALES = {
         "fb_ask_text": "Fikringizni yozib yuboring:",
         "fb_thanks": "Rahmat! Fikringiz qabul qilindi. Iltimos, baholang:",
         "fb_rated": "Rahmat! Bahoyingiz qabul qilindi.",
+        "fb_choose": "Iltimos, quyidagidan birini tanlang:",
+        "fb_enter_title": "Fikr yoki shikoyat turini tanlang:",
+        "fb_choose": "Iltimos, quyidagidan birini tanlang:",
+        "fb_rate_ask": "Iltimos, baholang:",
+        "fb_text_ask": "Fikringizni yozib yuboring:",
+        "fb_thanks": "Rahmat! Fikringiz qabul qilindi.",
         "cmp_ask_text": "Shikoyatingizni batafsil yozib yuboring:",
         "cmp_after_text": "Qo‘shimcha ma’lumot yuborishingiz mumkin:",
         "cmp_btn_photo": "📷 Rasm yuborish",
@@ -53,7 +59,11 @@ LOCALES = {
         "cmp_photo_saved": "Rasm qabul qilindi.",
         "cmp_loc_saved": "Lokatsiya qabul qilindi.",
         "cmp_sent": "Shikoyatingiz yuborildi. Rahmat!",
-        "fb_choose": "Iltimos, quyidagidan birini tanlang:",
+        
+
+        "cmp_text_ask": "Shikoyatingizni yozing:",
+        "cmp_addons_title": "Rasm yoki lokatsiya qo‘shishingiz mumkin, so‘ng “Yuborish” ni bosing.",
+        "cmp_sent": "Shikoyatingiz yuborildi.",
 
         # Locations (user)
         "loc_menu_title": "Lokatsiyalar bo‘limi:",
@@ -155,6 +165,15 @@ LOCALES = {
         "fb_ask_text": "Write your feedback:",
         "fb_thanks": "Thanks! Received. Please rate:",
         "fb_rated": "Thanks! Your rating is saved.",
+        "fb_enter_title": "Choose feedback type:",
+        "fb_choose": "Please choose one:",
+        "fb_rate_ask": "Please rate:",
+        "fb_text_ask": "Please write your feedback:",
+        "fb_thanks": "Thanks! Your feedback has been received.",
+
+        "cmp_text_ask": "Please describe your complaint:",
+        "cmp_addons_title": "You may attach a photo or location, then press “Send”.",
+        "cmp_sent": "Your complaint has been sent.",
         "cmp_ask_text": "Describe your complaint in detail:",
         "cmp_after_text": "You can attach more info:",
         "cmp_btn_photo": "📷 Send a photo",
@@ -265,6 +284,12 @@ LOCALES = {
         "fb_ask_text": "Напишите ваш отзыв:",
         "fb_thanks": "Спасибо! Получено. Пожалуйста, оцените:",
         "fb_rated": "Спасибо! Ваша оценка сохранена.",
+        "fb_enter_title": "Выберите тип: отзыв или жалоба:",
+        "fb_choose": "Пожалуйста, выберите действие:",
+        "fb_rate_ask": "Пожалуйста, оцените:",
+        "fb_text_ask": "Напишите ваш отзыв:",
+        "fb_thanks": "Спасибо! Ваш отзыв получен.",
+        "fb_choose": "Пожалуйста, выберите действие:",
         "cmp_ask_text": "Опишите вашу жалобу подробно:",
         "cmp_after_text": "Вы можете добавить больше информации:",
         "cmp_btn_photo": "📷 Отправить фото",
@@ -273,8 +298,10 @@ LOCALES = {
         "cmp_photo_saved": "Фото сохранено.",
         "cmp_loc_saved": "Локация сохранена.",
         "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
-        "fb_choose": "Пожалуйста, выберите действие:",
-
+        "cmp_text_ask": "Опишите вашу жалобу:",
+        "cmp_addons_title": "Можете приложить фото или локацию, затем нажмите «Отправить».",
+        "cmp_sent": "Ваша жалоба отправлена.",
+        
         # Locations
         "loc_menu_title": "Меню локаций:",
         "loc_btn_nearest": "📍 Ближайшая локация",
