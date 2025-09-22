@@ -62,6 +62,8 @@ LOCALES = {
         "cmp_more": "Qo‘shimcha ma’lumot yuborishingiz mumkin: rasm yoki lokatsiya. Tayyor bo‘lsangiz “Yuborish”ni bosing.",
         "cmp_send_photo": "Iltimos, shikoyat uchun rasm yuboring (galereyadan yoki kamera orqali).",
         "cmp_send_location": "Iltimos, lokatsiyangizni yuboring (📎 biriktirish → “Location”).",
+        "cmp_photo_ok": "Rasm qabul qilindi.",
+        "cmp_loc_ok": "Lokatsiya qabul qilindi.",
 
 
         # Group message (to moderators)
@@ -200,6 +202,8 @@ LOCALES = {
         "cmp_more": "You can add more info: a photo or your location. When ready, press “Send”.",
         "cmp_send_photo": "Please send a photo for your complaint (from gallery or camera).",
         "cmp_send_location": "Please share your location (📎 attach → “Location”).",
+        "cmp_photo_ok": "Photo received.",
+        "cmp_loc_ok": "Location received.",
 
 
 
@@ -339,6 +343,8 @@ LOCALES = {
         "cmp_more": "Можно добавить доп. информацию: фото или локацию. Готово — нажмите «Отправить».",
         "cmp_send_photo": "Пожалуйста, отправьте фото для вашей жалобы (из галереи или с камеры).",
         "cmp_send_location": "Пожалуйста, отправьте вашу локацию (📎 вложение → «Location»/«Местоположение»).",
+        "cmp_photo_ok": "Фото получено.",
+        "cmp_loc_ok": "Локация получена.",
 
 
 
