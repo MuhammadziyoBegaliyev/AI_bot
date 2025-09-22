@@ -49,7 +49,9 @@ LOCALES = {
         "fb_thanks": "Rahmat! Fikringiz qabul qilindi.",
         "fb_rated": "Rahmat! Bahoyingiz qabul qilindi.",
 
+        # Complaint steps (ikkala kalit mos keladi)
         "cmp_text_ask": "Shikoyatingizni batafsil yozing:",
+        "cmp_ask_text": "Shikoyatingizni batafsil yozing:",  # alias for handler
         "cmp_addons_title": "Rasm yoki lokatsiya qo‘shishingiz mumkin, so‘ng “Yuborish”ni bosing.",
         "cmp_btn_photo": "📷 Rasm yuborish",
         "cmp_btn_loc": "📍 Lokatsiyani yuborish",
@@ -57,10 +59,16 @@ LOCALES = {
         "cmp_photo_saved": "Rasm qabul qilindi.",
         "cmp_loc_saved": "Lokatsiya qabul qilindi.",
         "cmp_sent": "Shikoyatingiz yuborildi. Rahmat!",
+        "cmp_more": "Qo‘shimcha ma’lumot yuborishingiz mumkin: rasm yoki lokatsiya. Tayyor bo‘lsangiz “Yuborish”ni bosing.",
+        "cmp_send_photo": "Iltimos, shikoyat uchun rasm yuboring (galereyadan yoki kamera orqali).",
+        "cmp_send_location": "Iltimos, lokatsiyangizni yuboring (📎 biriktirish → “Location”).",
+
 
         # Group message (to moderators)
         "grp_tag_feedback": "🟢 FIKR",
         "grp_tag_complaint": "🔴 SHIKOYAT",
+        "grp_feedback": "Foydalanuvchi fikri",
+        "grp_complaint": "Foydalanuvchi shikoyati",
         "grp_lang": "🧷 Til",
         "grp_user": "👤 Foydalanuvchi",
         "grp_username": "🔗 Username",
@@ -179,7 +187,9 @@ LOCALES = {
         "fb_thanks": "Thanks! Your feedback has been received.",
         "fb_rated": "Thanks! Your rating is saved.",
 
+        # Complaint steps (both keys provided)
         "cmp_text_ask": "Please describe your complaint in detail:",
+        "cmp_ask_text": "Please describe your complaint in detail:",  # alias
         "cmp_addons_title": "You may attach a photo or location, then press “Send”.",
         "cmp_btn_photo": "📷 Send a photo",
         "cmp_btn_loc": "📍 Send location",
@@ -187,10 +197,13 @@ LOCALES = {
         "cmp_photo_saved": "Photo saved.",
         "cmp_loc_saved": "Location saved.",
         "cmp_sent": "Your complaint has been sent. Thank you!",
+        "cmp_more": "You can add more info: a photo or your location. When ready, press “Send”.",
 
         # Group message (to moderators)
         "grp_tag_feedback": "🟢 FEEDBACK",
         "grp_tag_complaint": "🔴 COMPLAINT",
+        "grp_feedback": "User feedback",
+        "grp_complaint": "User complaint",
         "grp_lang": "🧷 Language",
         "grp_user": "👤 User",
         "grp_username": "🔗 Username",
@@ -309,7 +322,9 @@ LOCALES = {
         "fb_thanks": "Спасибо! Ваш отзыв получен.",
         "fb_rated": "Спасибо! Ваша оценка сохранена.",
 
+        # Complaint steps (ikkala kalit)
         "cmp_text_ask": "Опишите вашу жалобу подробно:",
+        "cmp_ask_text": "Опишите вашу жалобу подробно:",  # alias
         "cmp_addons_title": "Можно приложить фото или локацию, затем нажмите «Отправить».",
         "cmp_btn_photo": "📷 Отправить фото",
         "cmp_btn_loc": "📍 Отправить локацию",
@@ -317,10 +332,14 @@ LOCALES = {
         "cmp_photo_saved": "Фото сохранено.",
         "cmp_loc_saved": "Локация сохранена.",
         "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
+        "cmp_more": "Можно добавить доп. информацию: фото или локацию. Готово — нажмите «Отправить».",
+
 
         # Group message (to moderators)
         "grp_tag_feedback": "🟢 ОТЗЫВ",
         "grp_tag_complaint": "🔴 ЖАЛОБА",
+        "grp_feedback": "Отзыв пользователя",
+        "grp_complaint": "Жалоба пользователя",
         "grp_lang": "🧷 Язык",
         "grp_user": "👤 Пользователь",
         "grp_username": "🔗 Username",
