@@ -59,9 +59,9 @@ LOCALES = {
         "cmp_sent": "Shikoyatingiz yuborildi. Rahmat!",
 
         # Group message (to moderators)
-        "grp_tag_feedback": "💚 FIKR",
-        "grp_tag_complaint": "🚩 SHIKOYAT",
-        "grp_title": "🧷 Til",
+        "grp_tag_feedback": "🟢 FIKR",
+        "grp_tag_complaint": "🔴 SHIKOYAT",
+        "grp_lang": "🧷 Til",
         "grp_user": "👤 Foydalanuvchi",
         "grp_username": "🔗 Username",
         "grp_contact": "📞 Kontakt",
@@ -189,9 +189,9 @@ LOCALES = {
         "cmp_sent": "Your complaint has been sent. Thank you!",
 
         # Group message (to moderators)
-        "grp_tag_feedback": "💚 FEEDBACK",
-        "grp_tag_complaint": "🚩 COMPLAINT",
-        "grp_title": "🧷 Language",
+        "grp_tag_feedback": "🟢 FEEDBACK",
+        "grp_tag_complaint": "🔴 COMPLAINT",
+        "grp_lang": "🧷 Language",
         "grp_user": "👤 User",
         "grp_username": "🔗 Username",
         "grp_contact": "📞 Contact",
@@ -319,9 +319,9 @@ LOCALES = {
         "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
 
         # Group message (to moderators)
-        "grp_tag_feedback": "💚 ОТЗЫВ",
-        "grp_tag_complaint": "🚩 ЖАЛОБА",
-        "grp_title": "🧷 Язык",
+        "grp_tag_feedback": "🟢 ОТЗЫВ",
+        "grp_tag_complaint": "🔴 ЖАЛОБА",
+        "grp_lang": "🧷 Язык",
         "grp_user": "👤 Пользователь",
         "grp_username": "🔗 Username",
         "grp_contact": "📞 Контакт",

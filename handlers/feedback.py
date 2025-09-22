@@ -148,16 +148,34 @@ async def cmp_send(cb: CallbackQuery, state: FSMContext):
     await cb.answer()
 
 # ====== Yordamchi: guruhga yuborish formatlari ======
+# def _fmt_user_block(lang: str, u) -> str:
+#     t = LOCALES[lang]
+#     # username may be None
+#     username = f"@{u.username}" if getattr(u, "username", None) else "-"
+#     return (
+#         f"{t['grp_lang']}: {lang}\n"
+#         f"{t['grp_user']}: {u.full_name or '-'} ({username})\n"
+#         f"{t['grp_contact']}: {u.phone or '-'}\n"
+#         f"{t['grp_age']}: {u.age or '-'}"
+#     )
+
 def _fmt_user_block(lang: str, u) -> str:
-    t = LOCALES[lang]
-    # username may be None
-    username = f"@{u.username}" if getattr(u, "username", None) else "-"
+    from locales import LOCALES
+    t = LOCALES.get(lang, LOCALES["uz"])
+    grp_lang = t.get("grp_lang", "Language")  # ← default
+    full_name = (u.full_name or "").strip()
+    username  = f"@{u.username}" if u.username else "-"
+    phone     = u.phone or "-"
+    age       = str(u.age) if getattr(u, "age", None) is not None else "-"
+
     return (
-        f"{t['grp_lang']}: {lang}\n"
-        f"{t['grp_user']}: {u.full_name or '-'} ({username})\n"
-        f"{t['grp_contact']}: {u.phone or '-'}\n"
-        f"{t['grp_age']}: {u.age or '-'}"
+        f"{grp_lang}: {lang}\n"
+        f"👤 {full_name}\n"
+        f"🪪 {username}\n"
+        f"📞 {phone}\n"
+        f"🔢 {age}\n"
     )
+
 
 async def _send_to_group_review(message: Message, lang: str, rating: int, text: str, u):
     gid = int(getattr(settings, "GROUP_ID", 0) or 0)
