@@ -64,6 +64,8 @@ LOCALES = {
         "cmp_send_location": "Iltimos, lokatsiyangizni yuboring (📎 biriktirish → “Location”).",
         "cmp_photo_ok": "Rasm qabul qilindi.",
         "cmp_loc_ok": "Lokatsiya qabul qilindi.",
+        "cmp_send_loc": "Iltimos, lokatsiyangizni yuboring.",
+        "cmp_send_location": "Iltimos, lokatsiyangizni yuboring.",  # alias (ixtiyoriy)
 
 
         # Group message (to moderators)
@@ -204,6 +206,8 @@ LOCALES = {
         "cmp_send_location": "Please share your location (📎 attach → “Location”).",
         "cmp_photo_ok": "Photo received.",
         "cmp_loc_ok": "Location received.",
+        "cmp_send_loc": "Please send your location.",
+        "cmp_send_location": "Please send your location.",  # alias (optional)
 
 
 
@@ -345,6 +349,8 @@ LOCALES = {
         "cmp_send_location": "Пожалуйста, отправьте вашу локацию (📎 вложение → «Location»/«Местоположение»).",
         "cmp_photo_ok": "Фото получено.",
         "cmp_loc_ok": "Локация получена.",
+        "cmp_send_loc": "Пожалуйста, отправьте вашу локацию.",
+        "cmp_send_location": "Пожалуйста, отправьте вашу локацию.",  # alias (необязательно)
 
 
 
