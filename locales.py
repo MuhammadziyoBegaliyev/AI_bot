@@ -1,4 +1,4 @@
-# path: locales.py
+
 
 LOCALES = {
     "uz": {
@@ -198,6 +198,10 @@ LOCALES = {
         "cmp_loc_saved": "Location saved.",
         "cmp_sent": "Your complaint has been sent. Thank you!",
         "cmp_more": "You can add more info: a photo or your location. When ready, press “Send”.",
+        "cmp_send_photo": "Please send a photo for your complaint (from gallery or camera).",
+        "cmp_send_location": "Please share your location (📎 attach → “Location”).",
+
+
 
         # Group message (to moderators)
         "grp_tag_feedback": "🟢 FEEDBACK",
@@ -333,6 +337,9 @@ LOCALES = {
         "cmp_loc_saved": "Локация сохранена.",
         "cmp_sent": "Ваша жалоба отправлена. Спасибо!",
         "cmp_more": "Можно добавить доп. информацию: фото или локацию. Готово — нажмите «Отправить».",
+        "cmp_send_photo": "Пожалуйста, отправьте фото для вашей жалобы (из галереи или с камеры).",
+        "cmp_send_location": "Пожалуйста, отправьте вашу локацию (📎 вложение → «Location»/«Местоположение»).",
+
 
 
         # Group message (to moderators)
