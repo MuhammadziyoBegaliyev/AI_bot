@@ -1,15 +1,21 @@
+# path: keyboards/admin_inline.py
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 from locales import LOCALES
 
+
 def admin_root_inline(lang: str) -> InlineKeyboardMarkup:
-    t = LOCALES[lang]
+    t = LOCALES.get(lang, LOCALES["uz"])
     rows = [
         [InlineKeyboardButton(text="📦 Drugs", callback_data="admin:drugs")],
         [InlineKeyboardButton(text="🏥 Pharmacies", callback_data="admin:pharmacies")],
         [InlineKeyboardButton(text="📍 Locations", callback_data="admin:locations")],
+        # Yangi: broadcast tugmalariga ko‘rsatma beruvchi umumiy kirish
+        [InlineKeyboardButton(text="📢 Aksiya yuborish", callback_data="adm:promo"),
+         InlineKeyboardButton(text="✉️ Habar yuborish", callback_data="adm:msg")],
         [InlineKeyboardButton(text=t["back"], callback_data="back:menu")],
     ]
     return InlineKeyboardMarkup(inline_keyboard=rows)
+
 
 def admin_drugs_inline(lang: str) -> InlineKeyboardMarkup:
     rows = [
@@ -20,6 +26,7 @@ def admin_drugs_inline(lang: str) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
+
 def admin_pharm_inline(lang: str) -> InlineKeyboardMarkup:
     rows = [
         [InlineKeyboardButton(text="➕ Add pharmacy", callback_data="ph:add")],
@@ -28,6 +35,7 @@ def admin_pharm_inline(lang: str) -> InlineKeyboardMarkup:
         [InlineKeyboardButton(text="⬅️ Back", callback_data="admin:root")],
     ]
     return InlineKeyboardMarkup(inline_keyboard=rows)
+
 
 def admin_loc_inline(lang: str) -> InlineKeyboardMarkup:
     rows = [
@@ -38,6 +46,7 @@ def admin_loc_inline(lang: str) -> InlineKeyboardMarkup:
     ]
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
+
 def admin_pager_inline(kind: str, page: int, has_next: bool) -> InlineKeyboardMarkup:
     # kind in {"drugs","ph","loc"}
     row = []
@@ -47,34 +56,43 @@ def admin_pager_inline(kind: str, page: int, has_next: bool) -> InlineKeyboardMa
         row.append(InlineKeyboardButton(text="Next »", callback_data=f"pager:{kind}:{page+1}"))
     if not row:
         row = [InlineKeyboardButton(text="—", callback_data="noop")]
-    return InlineKeyboardMarkup(inline_keyboard=[row, [InlineKeyboardButton(text="⬅️ Back", callback_data="admin:root")]])
+    return InlineKeyboardMarkup(
+        inline_keyboard=[row, [InlineKeyboardButton(text="⬅️ Back", callback_data="admin:root")]]
+    )
 
 
-
-
+# --------- Broadcast (promo / message) klaviaturalari ---------
 
 def admin_main_kb(lang: str) -> InlineKeyboardMarkup:
-    t = LOCALES[lang]
-    # Mavjud admin tugmalaringiz bo‘lsa, shular bilan BIR qatorda foydalaning.
+    t = LOCALES.get(lang, LOCALES["uz"])
     rows = [
-        [InlineKeyboardButton(text=t["adm_btn_send_promo"], callback_data="adm:bc:promo")],
-        [InlineKeyboardButton(text=t["adm_btn_send_msg"], callback_data="adm:bc:msg")],
+        [InlineKeyboardButton(text=t.get("adm_btn_send_promo", "📢 Aksiya yuborish"),
+                              callback_data="adm:promo")],
+        [InlineKeyboardButton(text=t.get("adm_btn_send_msg", "✉️ Habar yuborish"),
+                              callback_data="adm:msg")],
     ]
     return InlineKeyboardMarkup(inline_keyboard=rows)
 
+
 def bc_yes_no_photo_kb(lang: str) -> InlineKeyboardMarkup:
-    t = LOCALES[lang]
+    t = LOCALES.get(lang, LOCALES["uz"])
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=t["adm_bc_yes"], callback_data="bc:want:yes")],
-        [InlineKeyboardButton(text=t["adm_bc_no"], callback_data="bc:want:no")],
-        [InlineKeyboardButton(text=LOCALES[lang]["back"], callback_data="back:admin")]
+        [InlineKeyboardButton(text=t.get("adm_bc_yes", "Ha, rasm qo‘shaman"),
+                              callback_data="bc:want:yes")],
+        [InlineKeyboardButton(text=t.get("adm_bc_no", "Yo‘q, o‘tkazib yuborish"),
+                              callback_data="bc:want:no")],
+        [InlineKeyboardButton(text=t["back"], callback_data="back:admin")]
     ])
 
+
 def bc_preview_kb(lang: str) -> InlineKeyboardMarkup:
-    t = LOCALES[lang]
+    t = LOCALES.get(lang, LOCALES["uz"])
     return InlineKeyboardMarkup(inline_keyboard=[
-        [InlineKeyboardButton(text=t["adm_bc_send"], callback_data="bc:send")],
-        [InlineKeyboardButton(text=t["adm_bc_edit_text"], callback_data="bc:edit:text")],
-        [InlineKeyboardButton(text=t["adm_bc_edit_photo"], callback_data="bc:edit:photo")],
-        [InlineKeyboardButton(text=t["adm_bc_cancel"], callback_data="bc:cancel")],
+        [InlineKeyboardButton(text=t.get("adm_bc_send", "📨 Yuborish"), callback_data="bc:send")],
+        [InlineKeyboardButton(text=t.get("adm_bc_edit_text", "✏️ Matnni tahrirlash"),
+                              callback_data="bc:edit:text")],
+        [InlineKeyboardButton(text=t.get("adm_bc_edit_photo", "🖼 Rasmni almashtirish"),
+                              callback_data="bc:edit:photo")],
+        [InlineKeyboardButton(text=t.get("adm_bc_cancel", "❌ Bekor qilish"),
+                              callback_data="bc:cancel")],
     ])
