@@ -138,3 +138,33 @@ def locations_list_inline(lang: str, items: list) -> InlineKeyboardMarkup:
     rows.append([InlineKeyboardButton(text=t["loc_btn_nearest"], callback_data="locmenu:nearest")])
     rows.append([InlineKeyboardButton(text=t["back"], callback_data="back:menu")])
     return InlineKeyboardMarkup(inline_keyboard=rows)
+
+
+
+
+
+def admin_main_kb(lang: str) -> InlineKeyboardMarkup:
+    t = LOCALES[lang]
+    # Mavjud admin tugmalaringiz bo‘lsa, shular bilan BIR qatorda foydalaning.
+    rows = [
+        [InlineKeyboardButton(text=t["adm_btn_send_promo"], callback_data="adm:bc:promo")],
+        [InlineKeyboardButton(text=t["adm_btn_send_msg"], callback_data="adm:bc:msg")],
+    ]
+    return InlineKeyboardMarkup(inline_keyboard=rows)
+
+def bc_yes_no_photo_kb(lang: str) -> InlineKeyboardMarkup:
+    t = LOCALES[lang]
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=t["adm_bc_yes"], callback_data="bc:want:yes")],
+        [InlineKeyboardButton(text=t["adm_bc_no"], callback_data="bc:want:no")],
+        [InlineKeyboardButton(text=LOCALES[lang]["back"], callback_data="back:admin")]
+    ])
+
+def bc_preview_kb(lang: str) -> InlineKeyboardMarkup:
+    t = LOCALES[lang]
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text=t["adm_bc_send"], callback_data="bc:send")],
+        [InlineKeyboardButton(text=t["adm_bc_edit_text"], callback_data="bc:edit:text")],
+        [InlineKeyboardButton(text=t["adm_bc_edit_photo"], callback_data="bc:edit:photo")],
+        [InlineKeyboardButton(text=t["adm_bc_cancel"], callback_data="bc:cancel")],
+    ])

@@ -120,6 +120,29 @@ LOCALES = {
         "adm_saved": "✅ Saqlandi.",
         "adm_deleted": "🗑 O‘chirildi.",
         "adm_wrong_number": "❗️ Noto‘g‘ri format. Raqam kiriting.",
+        
+        #aksiya va habar yuborish 
+        "adm_broadcast_menu": "✉️ Yuborish bo‘limi:",
+        "adm_btn_send_promo": "🎉 Aksiya yuborish",
+        "adm_btn_send_msg": "🪪 Habar yuborish",
+
+        # Oqim savollari
+        "adm_bc_want_photo": "Rasm qo‘shmoqchimisiz?",
+        "adm_bc_yes": "Ha, rasm qo‘shaman",
+        "adm_bc_no": "Yo‘q, rasm yo‘q",
+        "adm_bc_send_photo": "Iltimos, rasm yuboring (yoki ⬅️ Orqaga).",
+        "adm_bc_photo_ok": "Rasm qabul qilindi.",
+        "adm_bc_ask_text": "Matnni yuboring:",
+        "adm_bc_preview_title": "🔎 Oldindan ko‘rish",
+        "adm_bc_edit": "✏️ Tahrirlash",
+        "adm_bc_edit_text": "✏️ Matnni tahrirlash",
+        "adm_bc_edit_photo": "🖼 Rasmini almashtirish",
+        "adm_bc_send": "📢 Hamma foydalanuvchiga yuborish",
+        "adm_bc_cancel": "❌ Bekor qilish",
+        "adm_bc_sending": "Yuborilmoqda… Bu biroz vaqt olishi mumkin.",
+        "adm_bc_done": "✅ Yuborildi.",
+        "adm_bc_cancelled": "Bekor qilindi.",
+
 
         # Admin – pharmacy CRUD prompts
         "adm_ph_title": "Apteka nomi (filial nomi):",
@@ -272,6 +295,28 @@ LOCALES = {
         "adm_ph_link": "Map URL (type '-' if none):",
         "adm_ph_saved": "✅ Pharmacy added: {title} (id={id})",
 
+
+        # aksiya va habar yuborish 
+        "adm_broadcast_menu": "✉️ Broadcast menu:",
+        "adm_btn_send_promo": "🎉 Send promotion",
+        "adm_btn_send_msg": "🪪 Send message",
+
+        "adm_bc_want_photo": "Do you want to attach an image?",
+        "adm_bc_yes": "Yes, add image",
+        "adm_bc_no": "No image",
+        "adm_bc_send_photo": "Please send the image (or ⬅️ Back).",
+        "adm_bc_photo_ok": "Image saved.",
+        "adm_bc_ask_text": "Send the text:",
+        "adm_bc_preview_title": "🔎 Preview",
+        "adm_bc_edit": "✏️ Edit",
+        "adm_bc_edit_text": "✏️ Edit text",
+        "adm_bc_edit_photo": "🖼 Change image",
+        "adm_bc_send": "📢 Send to all users",
+        "adm_bc_cancel": "❌ Cancel",
+        "adm_bc_sending": "Sending… This may take a moment.",
+        "adm_bc_done": "✅ Sent.",
+        "adm_bc_cancelled": "Cancelled.",    
+
         # AI
         "ai_welcome": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
         "ai_intro": "🤖 AI mode. Ask me anything.\nExit: “⬅️ Back” or /ai_stop",
@@ -414,6 +459,29 @@ LOCALES = {
         "adm_ph_addr": "Адрес:",
         "adm_ph_link": "Ссылка на карту (если нет — «-»):",
         "adm_ph_saved": "✅ Аптека добавлена: {title} (id={id})",
+
+
+        #admin aksia qoyish va habar yuborish
+        "adm_broadcast_menu": "✉️ Раздел рассылки:",
+        "adm_btn_send_promo": "🎉 Отправить акцию",
+        "adm_btn_send_msg": "🪪 Отправить сообщение",
+
+        "adm_bc_want_photo": "Хотите прикрепить изображение?",
+        "adm_bc_yes": "Да, добавить изображение",
+        "adm_bc_no": "Нет изображения",
+        "adm_bc_send_photo": "Пожалуйста, пришлите изображение (или ⬅️ Назад).",
+        "adm_bc_photo_ok": "Изображение сохранено.",
+        "adm_bc_ask_text": "Отправьте текст:",
+        "adm_bc_preview_title": "🔎 Предпросмотр",
+        "adm_bc_edit": "✏️ Редактировать",
+        "adm_bc_edit_text": "✏️ Редактировать текст",
+        "adm_bc_edit_photo": "🖼 Заменить изображение",
+        "adm_bc_send": "📢 Отправить всем пользователям",
+        "adm_bc_cancel": "❌ Отменить",
+        "adm_bc_sending": "Отправляем… Это может занять немного времени.",
+        "adm_bc_done": "✅ Отправлено.",
+        "adm_bc_cancelled": "Отменено.",
+
 
         # AI
         "ai_welcome": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",

@@ -188,3 +188,9 @@ async def get_location(db: AsyncSession, loc_id: int):
 async def delete_location(db: AsyncSession, loc_id: int):
     await db.execute(delete(Location).where(Location.id == loc_id))
     await db.commit()
+
+
+
+async def get_all_user_ids(db) -> list[int]:
+    res = await db.execute(select(User.tg_id))
+    return [row[0] for row in res.all()]
