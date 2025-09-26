@@ -194,3 +194,44 @@ async def delete_location(db: AsyncSession, loc_id: int):
 async def get_all_user_ids(db) -> list[int]:
     res = await db.execute(select(User.tg_id))
     return [row[0] for row in res.all()]
+
+
+# path: database/crud.py
+from sqlalchemy import select
+from sqlalchemy.exc import ProgrammingError, OperationalError
+
+# Agar allaqachon bo'lsa, takror qo'shmang:
+try:
+    from .models import User
+except Exception:
+    User = None
+
+try:
+    from .models import Feedback
+except Exception:
+    Feedback = None
+
+
+async def list_all_users(db) -> list[tuple[int]]:
+    """
+    Barcha foydalanuvchi Telegram ID larini qaytaradi.
+    Format: [(tg_id,), (tg_id,), ...] — handlers/admin.py shu shaklni qo'llab turadi.
+    Avval User jadvali, bo'lmasa Feedback dan distinct user_id olamiz.
+    """
+    # 1) User jadvali bor bo'lsa, undan o'qish:
+    if User is not None and hasattr(User, "tg_id"):
+        try:
+            res = await db.execute(select(User.tg_id))
+            rows = res.all()
+            return [(r[0],) for r in rows if r[0] is not None]
+        except (ProgrammingError, OperationalError):
+            pass  # pastdagi fallback'ga o'tamiz
+
+    # 2) Fallback: Feedback jadvalidagi noyob user_id lar
+    if Feedback is not None and hasattr(Feedback, "user_id"):
+        res = await db.execute(select(Feedback.user_id).distinct())
+        rows = res.all()
+        return [(r[0],) for r in rows if r[0] is not None]
+
+    # 3) Oxirgi chora — hech narsa topilmasa bo'sh ro'yxat
+    return []
