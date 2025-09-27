@@ -1,14 +1,17 @@
-# path: handlers/admin.py
 from aiogram import Router, F
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, BufferedInputFile
 from aiogram.fsm.context import FSMContext
 from aiogram.filters import Command
+
+import io
+import pandas as pd  # requirements.txt ga: pandas, xlsxwriter qo'shing
 
 from filters.admin import AdminFilter
 from locales import LOCALES
 from utils.lang import get_lang
+
 from keyboards.reply import location_request_kb
-from keyboards.admin_inline import (
+from keyboards.inline.admin_inline import (
     admin_root_inline, admin_drugs_inline, admin_pharm_inline, admin_loc_inline,
     admin_main_kb, bc_yes_no_photo_kb, bc_preview_kb
 )
@@ -23,8 +26,8 @@ from database.crud import (
     top_searches, list_feedbacks,
     add_drug, list_drugs, delete_drug,
     add_pharmacy, list_pharmacies, delete_pharmacy,
-    # quyidagi funksiya sizning CRUD’ga moslashtirilishi kerak:
-    list_all_users  # -> [(user_id, lang, ...)] qaytaradi deb faraz qilamiz
+    list_all_users,          # siz CRUDga qo'shgansiz (tg_id, full_name, age, phone, lang, ...)
+    list_searches            # foydalanuvchi qidiruvlari (user_id, query, created_at)
 )
 
 router = Router()
@@ -38,7 +41,6 @@ async def admin_panel(message: Message, state: FSMContext):
     lang = await get_lang(message.from_user.id)
     await message.answer("🛠 Admin panel", reply_markup=admin_root_inline(lang))
 
-
 # -------------------------------
 # Statistikalar / ro‘yxatlar
 # -------------------------------
@@ -46,10 +48,11 @@ async def admin_panel(message: Message, state: FSMContext):
 async def cb_top(cb: CallbackQuery):
     async with SessionLocal() as db:
         rows = await top_searches(db)
-    text = "📈 Top qidiruvlar:\n" + ("\n".join([f"{i+1}) {t} — {c}" for i, (t, c) in enumerate(rows)]) if rows else "—")
+    text = "📈 Top qidiruvlar:\n" + (
+        "\n".join([f"{i+1}) {t} — {c}" for i, (t, c) in enumerate(rows)]) if rows else "—"
+    )
     await cb.message.answer(text)
     await cb.answer()
-
 
 @router.callback_query(AdminFilter(), F.data == "adm:fb")
 async def cb_fb(cb: CallbackQuery):
@@ -65,9 +68,8 @@ async def cb_fb(cb: CallbackQuery):
     await cb.message.answer(txt)
     await cb.answer()
 
-
 # -------------------------------
-# Dori CRUD (sizdagi mantiq saqlangan)
+# Dori CRUD
 # -------------------------------
 @router.callback_query(AdminFilter(), F.data == "adm:drug_add")
 async def cb_drug_add(cb: CallbackQuery, state: FSMContext):
@@ -80,7 +82,6 @@ async def cb_drug_list(cb: CallbackQuery):
 @router.callback_query(AdminFilter(), F.data == "adm:drug_del")
 async def cb_drug_del(cb: CallbackQuery, state: FSMContext):
     await adb_del(cb.message, state); await cb.answer()
-
 
 @router.message(AdminFilter(), F.text == "/adb_add")
 async def adb_add(message: Message, state: FSMContext):
@@ -160,7 +161,9 @@ async def adb_alt(message: Message, state: FSMContext):
 async def adb_list(message: Message):
     async with SessionLocal() as db:
         items = await list_drugs(db)
-    txt = "📃 Dorilar:\n" + ("\n".join([f"{d.id}) {d.name} [{d.price_min}-{d.price_max}]" for d in items]) if items else "—")
+    txt = "📃 Dorilar:\n" + (
+        "\n".join([f"{d.id}) {d.name} [{d.price_min}-{d.price_max}]" for d in items]) if items else "—"
+    )
     await message.answer(txt)
 
 @router.message(AdminFilter(), F.text == "/adb_del")
@@ -174,7 +177,6 @@ async def adb_do_del(message: Message, state: FSMContext):
         await delete_drug(db, int(message.text))
     await state.clear()
     await message.answer("🗑 O‘chirildi.")
-
 
 # -------------------------------
 # Apteka CRUD — location orqali
@@ -190,7 +192,6 @@ async def cb_ph_list(cb: CallbackQuery):
 @router.callback_query(AdminFilter(), F.data == "adm:ph_del")
 async def cb_ph_del(cb: CallbackQuery, state: FSMContext):
     await aph_del(cb.message, state); await cb.answer()
-
 
 @router.message(AdminFilter(), F.text == "/aph_add")
 async def aph_add(message: Message, state: FSMContext):
@@ -255,7 +256,9 @@ async def aph_save(message: Message, state: FSMContext):
 async def aph_list(message: Message):
     async with SessionLocal() as db:
         items = await list_pharmacies(db)
-    txt = "📃 Aptekalar:\n" + ("\n".join([f"{p.id}) {p.title} ({p.lat},{p.lon}) — {p.address}" for p in items]) if items else "—")
+    txt = "📃 Aptekalar:\n" + (
+        "\n".join([f"{p.id}) {p.title} ({p.lat},{p.lon}) — {p.address}" for p in items]) if items else "—"
+    )
     await message.answer(txt)
 
 @router.message(AdminFilter(), F.text == "/aph_del")
@@ -269,7 +272,6 @@ async def aph_do_del(message: Message, state: FSMContext):
         await delete_pharmacy(db, int(message.text))
     await state.clear()
     await message.answer("🗑 O‘chirildi.")
-
 
 # -------------------------------
 # 📢 Aksiya va ✉️ Habar — Broadcast oqimi
@@ -285,7 +287,6 @@ async def bc_entry(cb: CallbackQuery, state: FSMContext):
     await cb.message.answer(ask, reply_markup=bc_yes_no_photo_kb(lang))
     await cb.answer()
 
-
 @router.callback_query(AdminFilter(), F.data.startswith("bc:want:"))
 async def bc_want_photo(cb: CallbackQuery, state: FSMContext):
     lang = await get_lang(cb.from_user.id)
@@ -293,17 +294,14 @@ async def bc_want_photo(cb: CallbackQuery, state: FSMContext):
     data = await state.get_data()
     bc_type = data.get("bc_type", "promo")
     if want == "yes":
-        # rasm kutamiz
         await (state.set_state(AdminPromo.waiting_photo) if bc_type == "promo"
                else state.set_state(AdminBroadcast.waiting_photo))
         await cb.message.answer(LOCALES.get(lang, LOCALES["uz"]).get("adm_bc_send_photo", "Rasm yuboring."))
     else:
-        # matn so‘raymiz
         await (state.set_state(AdminPromo.waiting_text) if bc_type == "promo"
                else state.set_state(AdminBroadcast.waiting_text))
         await cb.message.answer(LOCALES.get(lang, LOCALES["uz"]).get("adm_bc_send_text", "Matnni yuboring."))
     await cb.answer()
-
 
 @router.message(AdminPromo.waiting_photo, F.photo)
 @router.message(AdminBroadcast.waiting_photo, F.photo)
@@ -316,7 +314,6 @@ async def bc_got_photo(message: Message, state: FSMContext):
            else state.set_state(AdminBroadcast.waiting_text))
     await message.answer("✅ Rasm qabul qilindi. Endi matnni yuboring.")
 
-
 @router.message(AdminPromo.waiting_text, F.text)
 @router.message(AdminBroadcast.waiting_text, F.text)
 async def bc_got_text(message: Message, state: FSMContext):
@@ -328,12 +325,10 @@ async def bc_got_text(message: Message, state: FSMContext):
     await (state.set_state(AdminPromo.confirm) if data.get("bc_type") == "promo"
            else state.set_state(AdminBroadcast.confirm))
 
-    # Preview
     if photo_id:
         await message.answer_photo(photo_id, caption=txt, reply_markup=bc_preview_kb(lang))
     else:
         await message.answer(txt, reply_markup=bc_preview_kb(lang))
-
 
 @router.callback_query(AdminFilter(), F.data == "bc:edit:text")
 async def bc_edit_text(cb: CallbackQuery, state: FSMContext):
@@ -343,7 +338,6 @@ async def bc_edit_text(cb: CallbackQuery, state: FSMContext):
     await cb.message.answer("✏️ Yangi matnni yuboring.")
     await cb.answer()
 
-
 @router.callback_query(AdminFilter(), F.data == "bc:edit:photo")
 async def bc_edit_photo(cb: CallbackQuery, state: FSMContext):
     data = await state.get_data()
@@ -352,13 +346,11 @@ async def bc_edit_photo(cb: CallbackQuery, state: FSMContext):
     await cb.message.answer("🖼 Yangi rasmni yuboring.")
     await cb.answer()
 
-
 @router.callback_query(AdminFilter(), F.data == "bc:cancel")
 async def bc_cancel(cb: CallbackQuery, state: FSMContext):
     await state.clear()
     await cb.message.answer("❌ Bekor qilindi.")
     await cb.answer()
-
 
 @router.callback_query(AdminFilter(), F.data == "bc:send")
 async def bc_send(cb: CallbackQuery, state: FSMContext):
@@ -367,14 +359,19 @@ async def bc_send(cb: CallbackQuery, state: FSMContext):
     txt = data.get("text", "")
     photo_id = data.get("photo_id")
     count_ok = 0
+
     async with SessionLocal() as db:
         try:
-            users = await list_all_users(db)  # [(tg_id, ...), ...]
+            users = await list_all_users(db)  # model yoki tuple bo‘lishi mumkin
         except Exception:
-            users = []  # agar CRUD’da bo‘lmasa, o‘zingiz moslang
+            users = []
+
     bot = cb.message.bot
     for row in users:
-        tg_id = row[0] if isinstance(row, (list, tuple)) else getattr(row, "tg_id", None)
+        tg_id = (
+            row[0] if isinstance(row, (list, tuple)) else
+            getattr(row, "tg_id", None) or getattr(row, "telegram_id", None) or getattr(row, "id", None)
+        )
         if not tg_id:
             continue
         try:
@@ -389,4 +386,57 @@ async def bc_send(cb: CallbackQuery, state: FSMContext):
     await state.clear()
     done = LOCALES.get(lang, LOCALES["uz"]).get("adm_bc_done", "✅ Yuborildi")
     await cb.message.answer(f"{done}: {count_ok} ta foydalanuvchiga.")
+    await cb.answer()
+
+# -------------------------------
+# 📊 Foydalanuvchilar ma’lumoti — Excel eksport
+# -------------------------------
+@router.callback_query(AdminFilter(), F.data == "admin:users_export")
+async def cb_users_export(cb: CallbackQuery):
+    # foydalanuvchilar, fikrlar va qidiruvlarni bitta .xlsx faylga
+    async with SessionLocal() as db:
+        users = await list_all_users(db)
+        fbs   = await list_feedbacks(db)
+        srchs = await list_searches(db)
+
+    # Users
+    df_users = pd.DataFrame([{
+        "UserID": getattr(u, "tg_id", None) or getattr(u, "telegram_id", None) or getattr(u, "id", None),
+        "Ism Familiya": getattr(u, "full_name", None),
+        "Yosh": getattr(u, "age", None),
+        "Telefon": getattr(u, "phone", None),
+        "Til": getattr(u, "lang", None),
+        "Username": f"@{getattr(u, 'username', '')}" if getattr(u, "username", None) else "",
+        "Ro‘yxatga olingan": getattr(u, "created_at", None),
+    } for u in users])
+
+    # Feedbacks
+    df_fb = pd.DataFrame([{
+        "UserID": getattr(f, "user_id", None),
+        "Matn": getattr(f, "text", None),
+        "Baho": getattr(f, "rating", None),
+        "Shikoyat foto": bool(getattr(f, "complaint_photo_id", None)),
+        "Shikoyat lokatsiya": getattr(f, "complaint_location", None),
+        "Sana": getattr(f, "created_at", None),
+    } for f in fbs])
+
+    # Searches
+    df_search = pd.DataFrame([{
+        "UserID": getattr(s, "user_id", None),
+        "So‘rov": getattr(s, "query", None),
+        "Sana": getattr(s, "created_at", None),
+    } for s in srchs])
+
+    # Excel fayl
+    out = io.BytesIO()
+    with pd.ExcelWriter(out, engine="xlsxwriter") as writer:
+        df_users.to_excel(writer, index=False, sheet_name="Users")
+        df_fb.to_excel(writer, index=False, sheet_name="Feedbacks")
+        df_search.to_excel(writer, index=False, sheet_name="Searches")
+    out.seek(0)
+
+    await cb.message.answer_document(
+        document=BufferedInputFile(out.read(), filename="users_report.xlsx"),
+        caption="📊 Foydalanuvchilar hisobot fayli"
+    )
     await cb.answer()
