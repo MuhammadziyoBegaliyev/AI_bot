@@ -151,6 +151,11 @@ LOCALES = {
         "adm_ph_addr": "Manzil:",
         "adm_ph_link": "Xarita havolasi (yo‘q bo‘lsa '-' yozing):",
         "adm_ph_saved": "✅ Apteka qo‘shildi: {title} (id={id})",
+        "adm_btn_users_export": "📊 Foydalanuvchilar ma’lumoti (Excel)",
+        "adm_export_prep": "⏳ Hisobot tayyorlanmoqda…",
+        "adm_export_done": "✅ Hisobot tayyor. Quyidagi faylni yuklab oling.",
+        "adm_export_empty": "Hali foydalanuvchilar topilmadi.",
+
 
         # AI
         "ai_welcome": "🤖 Sun'iy intellekt rejimi. Istalgan savolingizni yozing.\nChiqish: “⬅️ Orqaga” yoki /ai_stop",
@@ -294,7 +299,10 @@ LOCALES = {
         "adm_ph_addr": "Address:",
         "adm_ph_link": "Map URL (type '-' if none):",
         "adm_ph_saved": "✅ Pharmacy added: {title} (id={id})",
-
+        "adm_btn_users_export": "📊 Users report (Excel)",
+        "adm_export_prep": "⏳ Preparing the report…",
+        "adm_export_done": "✅ Report is ready. Download the file below.",
+        "adm_export_empty": "No users yet.",
 
         # aksiya va habar yuborish 
         "adm_broadcast_menu": "✉️ Broadcast menu:",
@@ -481,7 +489,10 @@ LOCALES = {
         "adm_bc_sending": "Отправляем… Это может занять немного времени.",
         "adm_bc_done": "✅ Отправлено.",
         "adm_bc_cancelled": "Отменено.",
-
+        "adm_btn_users_export": "📊 Отчёт по пользователям (Excel)",
+        "adm_export_prep": "⏳ Готовим отчёт…",
+        "adm_export_done": "✅ Отчёт готов. Скачайте файл ниже.",
+        "adm_export_empty": "Пользователей пока нет.",
 
         # AI
         "ai_welcome": "🤖 Режим ИИ. Задайте любой вопрос.\nВыход: «⬅️ Назад» или /ai_stop",
