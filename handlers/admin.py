@@ -11,10 +11,11 @@ from locales import LOCALES
 from utils.lang import get_lang
 
 from keyboards.reply import location_request_kb
-from keyboards.inline.admin_inline import (
-    admin_root_inline, admin_drugs_inline, admin_pharm_inline, admin_loc_inline,
-    admin_main_kb, bc_yes_no_photo_kb, bc_preview_kb
+from keyboards.admin_inline import (
+    admin_root_inline, admin_drugs_inline, admin_pharm_inline,
+    admin_loc_inline, admin_main_kb, bc_yes_no_photo_kb, bc_preview_kb
 )
+
 
 from states.admin import (
     AdminDrug, AdminPharmacy, AdminDelete,
