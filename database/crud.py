@@ -235,3 +235,30 @@ async def list_all_users(db) -> list[tuple[int]]:
 
     # 3) Oxirgi chora — hech narsa topilmasa bo'sh ro'yxat
     return []
+
+
+
+
+
+# Foydalanuvchi bo‘yicha qidiruvlar (so‘nggi tartibda)
+async def get_user_searches(db, tg_id: int) -> list[str]:
+    try:
+        from .models import SearchQuery  # model nomi siznikida boshqacha bo‘lsa moslang
+    except Exception:
+        return []
+    q = await db.execute(
+        select(SearchQuery.query)
+        .where(SearchQuery.user_id == tg_id)
+        .order_by(SearchQuery.created_at.desc())
+        .limit(10)
+    )
+    return [r[0] for r in q.all()]
+
+# Foydalanuvchi feedback/complaintlari
+async def get_user_feedbacks(db, tg_id: int):
+    try:
+        from .models import Feedback
+    except Exception:
+        return []
+    q = await db.execute(select(Feedback).where(Feedback.user_id == tg_id))
+    return [row[0] for row in q.all()]
